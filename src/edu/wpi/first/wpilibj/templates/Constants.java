@@ -22,7 +22,8 @@ public class Constants {
     
     public static final int ANGLE_CHANNEL_A = 1;
     public static final int ANGLE_CHANNEL_B = 2;
-    
+    public static final int SONIC_RIGHT_CHANNEL = 1;
+    public static final int SONIC_LEFT_CHANNEL = 2;
     
     static Talon leftForward = new Talon(PWM_DRIVE_FL);
     static Talon leftBackward = new Talon(PWM_DRIVE_RL);
@@ -35,4 +36,5 @@ public class Constants {
     
     double[] throwerSpeedVals = new double[10];
     int[] throwerArcVals = new int[10];
+    int[] throwerDistanceVals = new int[10];
 }

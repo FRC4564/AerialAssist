@@ -8,6 +8,7 @@ package edu.wpi.first.wpilibj.templates;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Jaguar;
+import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 
 /**
  *
@@ -20,7 +21,7 @@ public class Throweraterenator {
     private double returnSpeed = 0;
     private int status = 0;
     private int arc = 0;
-    private Encoder angle = new Encoder(Constants.ANGLE_CHANNEL_A, Constants.ANGLE_CHANNEL_B);
+    private Encoder angle = new Encoder(Constants.ANGLE_CHANNEL_A, Constants.ANGLE_CHANNEL_B, true, EncodingType.k4X);
     
     public Throweraterenator() {
         angle.start();
@@ -42,7 +43,7 @@ public class Throweraterenator {
         return returnSpeed;
     }
     
-    public void setThrowStatus(int value) {
+    public void setStatus(int value) {
         status = value;
     }
     
