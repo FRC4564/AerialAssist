@@ -66,6 +66,11 @@ public class Throweraterenator {
     
     public void zeroEncoder() {
         angle.reset();
+        angle.start();
+    }
+    
+    public void stopEncoder() {
+        angle.stop();
     }
     
     public void update() {
