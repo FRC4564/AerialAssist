@@ -17,6 +17,9 @@ public class Constants {
     public static final int PWM_DRIVE_RL = 3;
     public static final int PWM_DRIVE_FR = 2;
     public static final int PWM_DRIVE_RR = 1;
+    public static final int PWM_THROWER_1 = 5;
+    public static final int PWM_THROWER_2 = 6;
+    
     
     static Talon leftForward = new Talon(PWM_DRIVE_FL);
     static Talon leftBackward = new Talon(PWM_DRIVE_RL);
