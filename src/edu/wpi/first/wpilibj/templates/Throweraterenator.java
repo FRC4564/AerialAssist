@@ -6,6 +6,7 @@
 
 package edu.wpi.first.wpilibj.templates;
 
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Jaguar;
 
 /**
@@ -13,11 +14,18 @@ import edu.wpi.first.wpilibj.Jaguar;
  * @author TheGreenBox
  */
 public class Throweraterenator {
-    private Jaguar arm1 = new Jaguar(Constants.PWM_THROWER_1);
-    private Jaguar arm2 = new Jaguar(Constants.PWM_THROWER_2);
+    private Jaguar armRight = new Jaguar(Constants.PWM_THROWER_RIGHT);
+    private Jaguar armLeft = new Jaguar(Constants.PWM_THROWER_LEFT);
     private double throwSpeed = 0;
     private double returnSpeed = 0;
+    private int status = 0;
+    private int arc = 0;
+    private Encoder angle = new Encoder(Constants.ANGLE_CHANNEL_A, Constants.ANGLE_CHANNEL_B);
     
+    public Throweraterenator() {
+        angle.start();
+        angle.reset();
+    }
     
     public void setThrowSpeed(double speed) {
         throwSpeed = speed;
@@ -34,5 +42,51 @@ public class Throweraterenator {
         return returnSpeed;
     }
     
+    public void setThrowStatus(int value) {
+        status = value;
+    }
     
+    public int getStatus() {
+        return status;
+    }
+    
+    public void setThrowArc(int value) {
+        arc = value;
+    }
+    
+    public int getThrowArc() {
+        return arc;
+    }
+    
+    public int encoderCount() {
+        return angle.get();
+    }
+    
+    public void zeroEncoder() {
+        angle.reset();
+    }
+    
+    public void update() {
+        if (getStatus() == 1) {
+            updateThrow();
+        } else if (getStatus() == 2) {
+            updateStow();
+        }
+    }
+    
+    public void updateThrow() {
+        
+    }
+    
+    public void updateStow() {
+        
+    }
+    
+    public boolean checkDistance() {
+        return true;
+    }
+    
+    public double setDistance(double distance) {
+        return 0;
+    }
 }

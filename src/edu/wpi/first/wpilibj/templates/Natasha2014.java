@@ -18,6 +18,7 @@ public class Natasha2014 extends SimpleRobot {
     Joystick rightstick = new Joystick(2);
     
     DriveTrain dt = new DriveTrain(Constants.leftForward, Constants.leftBackward, Constants.rightForward, Constants.rightBackward);
+    Throweraterenator cat = new Throweraterenator();
     
     protected void robotInit(){
        dt.setMotorsInverted();
