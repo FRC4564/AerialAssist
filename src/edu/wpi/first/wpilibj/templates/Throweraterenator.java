@@ -15,17 +15,23 @@ import edu.wpi.first.wpilibj.Jaguar;
 public class Throweraterenator {
     private Jaguar arm1 = new Jaguar(Constants.PWM_THROWER_1);
     private Jaguar arm2 = new Jaguar(Constants.PWM_THROWER_2);
+    private double throwSpeed = 0;
+    private double returnSpeed = 0;
     
-    public void setMotorSpeed(double speed) {
-        arm1.set(speed);
-        arm2.set(speed);
+    
+    public void setThrowSpeed(double speed) {
+        throwSpeed = speed;
     }
     
-    public double[] geMotorSpeed() {
-        double[] speeds = new double[2];
-        speeds[1] = arm1.get();
-        speeds[2] = arm2.get();
-        return speeds;
+    public double getThrowSpeed() {
+        return throwSpeed;
+    }
+    public void setReturnSpeed(double speed) {
+        returnSpeed = speed;
+    }
+    
+    public double getReturnSpeed() {
+        return returnSpeed;
     }
     
     
