@@ -26,6 +26,7 @@ public class Throweraterenator {
     public Throweraterenator() {
         angle.start();
         angle.reset();
+        
     }
     
     public void setThrowSpeed(double speed) {
@@ -68,7 +69,9 @@ public class Throweraterenator {
     }
     
     public void update() {
-        if (getStatus() == 1) {
+        if (Natasha2014.leftstick.getRawButton(1)) {
+            status = 1;
+        } else if (getStatus() == 1) {
             updateThrow();
         } else if (getStatus() == 2) {
             updateStow();
@@ -76,11 +79,25 @@ public class Throweraterenator {
     }
     
     public void updateThrow() {
-        
+        if (angle.get() < arc) {
+            armRight.set(-throwSpeed);
+            armLeft.set(throwSpeed);
+        } else {
+            armRight.set(0);
+            armLeft.set(0);
+            status = 2;
+        }
     }
     
     public void updateStow() {
-        
+        if (angle.get() > 0) {
+            armRight.set(-returnSpeed);
+            armLeft.set(returnSpeed);
+        } else {
+            armRight.set(0);
+            armLeft.set(0);
+            status = 0;
+        }
     }
     
     public boolean checkDistance() {

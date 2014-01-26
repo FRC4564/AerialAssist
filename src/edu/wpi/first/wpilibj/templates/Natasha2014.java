@@ -8,17 +8,19 @@
 package edu.wpi.first.wpilibj.templates;
 
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SimpleRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
 
 public class Natasha2014 extends SimpleRobot {
     
-    Joystick leftstick = new Joystick(1);
+    static Joystick leftstick = new Joystick(1);
     Joystick rightstick = new Joystick(2);
     
     DriveTrain dt = new DriveTrain(Constants.leftForward, Constants.leftBackward, Constants.rightForward, Constants.rightBackward);
     Throweraterenator cat = new Throweraterenator();
+    DriverStation ds = DriverStation.getInstance();
     
     protected void robotInit(){
        dt.setMotorsInverted();
@@ -39,6 +41,10 @@ public class Natasha2014 extends SimpleRobot {
             } else {
                 dt.arcadeDrive(leftstick.getY(), leftstick.getX() * .7);
             }
+            System.out.println(cat.encoderCount());
+            cat.setThrowSpeed(ds.getAnalogIn(1));
+            cat.setReturnSpeed(ds.getAnalogIn(2));
+            cat.update();
             Timer.delay(Constants.TIMER_DELAY_SECS);
         }        
 
