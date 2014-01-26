@@ -73,10 +73,12 @@ public class Throweraterenator {
         angle.stop();
     }
     
+    public void Throw() {
+        status = 1;
+    }
+    
     public void update() {
-        if (Natasha2014.leftstick.getRawButton(1)) {
-            status = 1;
-        } else if (getStatus() == 1) {
+        if (getStatus() == 1) {
             updateThrow();
         } else if (getStatus() == 2) {
             updateStow();
