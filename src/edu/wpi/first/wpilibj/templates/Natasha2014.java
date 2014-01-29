@@ -46,10 +46,11 @@ public class Natasha2014 extends SimpleRobot {
                 dt.arcadeDrive(leftstick.getY(), leftstick.getX() * .7);
             }
             // Catapult
-            System.out.println(cat.encoderCount());
+            System.out.print(cat.encoderCount());
+            System.out.println(", " + cat.getStatus());
             cat.setThrowSpeed(ds.getAnalogIn(1) / 5);
             cat.setThrowArc((int)(ds.getAnalogIn(2) / 5 * 400 + 800) );
-            cat.setReturnSpeed(-0.2);
+            cat.setReturnSpeed(-0.3);
             if (leftstick.getRawButton(1)) {
                 cat.Throw();
             }
