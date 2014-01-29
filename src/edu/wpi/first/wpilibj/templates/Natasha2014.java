@@ -11,21 +11,22 @@ package edu.wpi.first.wpilibj.templates;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SimpleRobot;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Timer;
 
 public class Natasha2014 extends SimpleRobot {
     
-    static Joystick leftstick = new Joystick(1);
+    Joystick leftstick = new Joystick(1);
     Joystick rightstick = new Joystick(2);
     
-    
-//    DriveTrain dt = new DriveTrain(Constants.leftForward, Constants.leftBackward, Constants.rightForward, Constants.rightBackward);
+    DriverStation ds;
+    DriveTrain dt = new DriveTrain(Constants.leftForward, Constants.leftBackward, Constants.rightForward, Constants.rightBackward);
     Throweraterenator cat = new Throweraterenator();
-    DriverStation ds = DriverStation.getInstance();
     
-    protected void robotInit(){
+    protected void robotInit() {
+       ds = DriverStation.getInstance();
        System.out.println("RobotInit...");
-//       dt.setMotorsInverted();
+       dt.setMotorsInverted();
     }
     
     public void autonomous() {
@@ -37,12 +38,12 @@ public class Natasha2014 extends SimpleRobot {
      */
     public void operatorControl() {
         System.out.println("Teleop...");
-//        dt.setSafetyEnabled(false);
+        dt.setSafetyEnabled(true);
         while(isOperatorControl() && isEnabled()){
             if (leftstick.getRawButton(Constants.JB_DRIVE_SLOW)) {
-//                dt.arcadeDrive(leftstick.getY() * .7, leftstick.getX() * .5);
+                dt.arcadeDrive(leftstick.getY() * .7, leftstick.getX() * .5);
             } else {
-//                dt.arcadeDrive(leftstick.getY(), leftstick.getX() * .7);
+                dt.arcadeDrive(leftstick.getY(), leftstick.getX() * .7);
             }
             // Catapult
             System.out.println(cat.encoderCount());

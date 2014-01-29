@@ -6,6 +6,7 @@
 
 package edu.wpi.first.wpilibj.templates;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Talon;
 
 /**
@@ -37,4 +38,5 @@ public class Constants {
     double[] throwerSpeedVals = new double[10];
     int[] throwerArcVals = new int[10];
     int[] throwerDistanceVals = new int[10];
+
 }

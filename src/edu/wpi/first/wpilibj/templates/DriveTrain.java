@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.SpeedController;
  *
  * @author Steven
  */
-public class DriveTrain extends RobotDrive {
+public class DriveTrain extends RobotDrive{
     
     public DriveTrain(SpeedController leftForward, SpeedController leftBackward, SpeedController rightForward, SpeedController rightBackward) {
         super(leftForward, leftBackward, rightForward, rightBackward);
