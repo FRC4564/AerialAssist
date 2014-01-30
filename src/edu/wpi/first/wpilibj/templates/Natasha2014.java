@@ -20,18 +20,21 @@ public class Natasha2014 extends SimpleRobot {
     Joystick rightstick = new Joystick(2);
     
     DriverStation ds;
+    // Can we get this long line to be split onto 2 lines, for readability?
     DriveTrain dt = new DriveTrain(Constants.leftForward, Constants.leftBackward, Constants.rightForward, Constants.rightBackward);
-    Throweraterenator cat = new Throweraterenator();
+    Throweraterenator thrower = new Throweraterenator();
     
     protected void robotInit() {
-       ds = DriverStation.getInstance();
        System.out.println("RobotInit...");
+       ds = DriverStation.getInstance();
        dt.setMotorsInverted();
     }
+
     
     public void autonomous() {
         
     }
+
 
     /**
      * This function is called once each time the robot enters operator control.
@@ -45,16 +48,21 @@ public class Natasha2014 extends SimpleRobot {
             } else {
                 dt.arcadeDrive(leftstick.getY(), leftstick.getX() * .7);
             }
-            // Catapult
-            System.out.print(cat.encoderCount());
-            System.out.println(", " + cat.getStatus());
-            cat.setThrowSpeed(ds.getAnalogIn(1) / 5);
-            cat.setThrowArc((int)(ds.getAnalogIn(2) / 5 * 400 + 800) );
-            cat.setReturnSpeed(-0.3);
+            // *** Thrower
+            // How about we change 'encoderCount()' to 'position()'?
+            System.out.print(thrower.encoderCount());
+            System.out.println(", " + thrower.getStatus());
+            thrower.setThrowSpeed(ds.getAnalogIn(1) / 5);
+            thrower.setThrowArc((int)(ds.getAnalogIn(2) / 5 * 400 + 800) );
+            thrower.setReturnSpeed(-0.3);
+            // setup constants joystick buttons.  For safety, I'd like 2 buttons to be pressed to
+            // initiate thrower. Use buttons at base on left and right hand side of stick so it
+            // takes two hands to initiate a throw.  This will be temporary, while we test/tune.
             if (leftstick.getRawButton(1)) {
-                cat.Throw();
+                // What is the proper case presentation for methods.  Should this be 'throw()'?
+                thrower.Throw();
             }
-            cat.update();
+            thrower.update();
             
             Timer.delay(Constants.TIMER_DELAY_SECS);
         }        
