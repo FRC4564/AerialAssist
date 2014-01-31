@@ -16,8 +16,8 @@ import edu.wpi.first.wpilibj.SpeedController;
  */
 public class DriveTrain extends RobotDrive{
     
-    public DriveTrain(SpeedController leftForward, SpeedController leftBackward, SpeedController rightForward, SpeedController rightBackward) {
-        super(leftForward, leftBackward, rightForward, rightBackward);
+    public DriveTrain(SpeedController frontLeft, SpeedController rearLeft, SpeedController frontRight, SpeedController rearRight) {
+        super(frontLeft, rearLeft, frontRight, rearRight);
     }
     
     public void setMotorsInverted() {

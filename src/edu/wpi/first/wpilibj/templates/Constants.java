@@ -16,44 +16,50 @@ import edu.wpi.first.wpilibj.Talon;
 public class Constants {
     
     // PWMs
-    // Let's change abbreviations to use words FRONT, REAR, LEFT, RIGHT
-    public static final int PWM_DRIVE_FL = 4;
-    public static final int PWM_DRIVE_RL = 3;
-    public static final int PWM_DRIVE_FR = 2;
-    public static final int PWM_DRIVE_RR = 1;
+    public static final int PWM_DRIVE_FRONT_LEFT = 4;
+    public static final int PWM_DRIVE_REAR_LEFT = 3;
+    public static final int PWM_DRIVE_FRONT_RIGHT = 2;
+    public static final int PWM_DRIVE_REAR_RIGHT = 1;
     public static final int PWM_THROWER_RIGHT = 5;
     public static final int PWM_THROWER_LEFT = 6;
     
     // DIOs
-    // Change thse names to DIO_THROWER_ENCODER_A & B
-    public static final int ANGLE_CHANNEL_A = 1;
-    public static final int ANGLE_CHANNEL_B = 2;
+    public static final int DIO_THROWER_ENCODER_A = 1;
+    public static final int DIO_THROWER_ENCODER_B = 2;
     
     // Analog Inputs
-    public static final int SONIC_RIGHT_CHANNEL = 1;
-    public static final int SONIC_LEFT_CHANNEL = 2;
+    public static final int ANA_SONIC_RIGHT = 1;
+    public static final int ANA_SONIC_LEFT = 2;
     
     // Relays
     
     
     // Drive Motors
-    // Change these names to use Front/Rear and then Left/Right
-    static Talon leftForward = new Talon(PWM_DRIVE_FL);
-    static Talon leftBackward = new Talon(PWM_DRIVE_RL);
-    static Talon rightForward = new Talon(PWM_DRIVE_FR);
-    static Talon rightBackward = new Talon(PWM_DRIVE_RR);
-    
-    // Joystick Buttons
+    static Talon frontLeft = new Talon(PWM_DRIVE_FRONT_LEFT);
+    static Talon rearLeft = new Talon(PWM_DRIVE_REAR_LEFT);
+    static Talon frontRight = new Talon(PWM_DRIVE_FRONT_RIGHT);
+    static Talon rearRight = new Talon(PWM_DRIVE_REAR_RIGHT);
+        
+    // Joysticks
     public static final int JB_DRIVE_SLOW = 2;
+    public static final int JB_INIT_THROW_1 = 7;
+    public static final int JB_INIT_THROW_2 = 10;
     
     
     // Miscellaneous
-    // Change name to TELEOP_LOOP_DELAY_SECS
-    public static final double TIMER_DELAY_SECS = .01;
+    public static final double TELEOP_LOOP_DELAY_SECS = .01;
     
     // Thrower parameters
-    double[] throwerSpeedVals = new double[10];
-    int[] throwerArcVals = new int[10];
+    static double[] throwerSpeedVals = new double[10];
+    static int[] throwerArcVals = new int[10];
     int[] throwerDistanceVals = new int[10];
+    public static final int THROWER_STATUS_IDLE = 0;
+    public static final int THROWER_STATUS_THROW = 1;
+    public static final int THROWER_STATUS_STOW = 2;
+    
+    //Sonic constants
+    public static final int SONIC_BALANCE_EQUAL = 0;
+    public static final int SONIC_BALANCE_RIGHT = 1;
+    public static final int SONIC_BALANCE_LEFT = 2;
 
 }

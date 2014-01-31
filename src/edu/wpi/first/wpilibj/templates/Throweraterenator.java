@@ -21,12 +21,16 @@ public class Throweraterenator {
     private double returnSpeed = 0;
     private int status = 0;
     private int arc = 0;
-    private Encoder angle = new Encoder(Constants.ANGLE_CHANNEL_A, Constants.ANGLE_CHANNEL_B, true, EncodingType.k4X);
+    private Encoder angle = new Encoder(Constants.DIO_THROWER_ENCODER_A, Constants.DIO_THROWER_ENCODER_B, true, EncodingType.k4X);
     
     public Throweraterenator() {
         angle.start();
         angle.reset();
-        
+    }
+    
+    private void setMotors(double speed) {
+        armRight.set(-speed);
+        armLeft.set(speed);
     }
     
     public void setThrowSpeed(double speed) {
@@ -44,10 +48,6 @@ public class Throweraterenator {
         return returnSpeed;
     }
     
-    public void setStatus(int value) {
-        status = value;
-    }
-    
     public int getStatus() {
         return status;
     }
@@ -60,7 +60,7 @@ public class Throweraterenator {
         return arc;
     }
     
-    public int encoderCount() {
+    public int position() {
         return angle.get();
     }
     
@@ -78,32 +78,28 @@ public class Throweraterenator {
     }
     
     public void update() {
-        if (getStatus() == 1) {
+        if (getStatus() == Constants.THROWER_STATUS_THROW) {
             updateThrow();
-        } else if (getStatus() == 2) {
+        } else if (getStatus() == Constants.THROWER_STATUS_STOW) {
             updateStow();
         }
     }
     
     public void updateThrow() {
         if (angle.get() < arc) {
-            armRight.set(-throwSpeed);
-            armLeft.set(throwSpeed);
+            setMotors(throwSpeed);
         } else {
-            armRight.set(0);
-            armLeft.set(0);
-            status = 2;
+            setMotors(0);
+            status = Constants.THROWER_STATUS_STOW;
         }
     }
     
     public void updateStow() {
         if (angle.get() > 0) {
-            armRight.set(-returnSpeed);
-            armLeft.set(returnSpeed);
+            setMotors(returnSpeed);
         } else {
-            armRight.set(0);
-            armLeft.set(0);
-            status = 0;
+            setMotors(0);
+            status = Constants.THROWER_STATUS_IDLE;
         }
     }
     
