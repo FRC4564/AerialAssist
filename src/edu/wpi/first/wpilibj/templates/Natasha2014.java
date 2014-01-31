@@ -19,7 +19,6 @@ public class Natasha2014 extends SimpleRobot {
     Joystick leftstick = new Joystick(1);
     Joystick rightstick = new Joystick(2);
     
-    Preferences prefs;
     
     DriverStation ds;
     // Can we get this long line to be split onto 2 lines, for readability?
@@ -44,8 +43,6 @@ public class Natasha2014 extends SimpleRobot {
     public void operatorControl() {
         System.out.println("Teleop...");
         dt.setSafetyEnabled(true);
-        thrower.setThrowArc(prefs.getInt("Thrower Arc", 0));
-        thrower.setThrowSpeed(prefs.getDouble("Thrower Speed", 0.0));
         while(isOperatorControl() && isEnabled()){
             if (leftstick.getRawButton(Constants.JB_DRIVE_SLOW)) {
                 dt.arcadeDrive(leftstick.getY() * .7, leftstick.getX() * .5);
