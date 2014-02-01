@@ -11,7 +11,6 @@ package edu.wpi.first.wpilibj.templates;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SimpleRobot;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.Timer;
 
 public class Natasha2014 extends SimpleRobot {
@@ -50,14 +49,15 @@ public class Natasha2014 extends SimpleRobot {
                 dt.arcadeDrive(leftstick.getY(), leftstick.getX() * .7);
             }
             // *** Thrower
-            System.out.print(thrower.position());
-            System.out.println(", " + thrower.getStatus());
-            thrower.setThrowSpeed(ds.getAnalogIn(1) / 5);
-            thrower.setThrowArc((int)(ds.getAnalogIn(2) / 5 * 400 + 800) );
-            thrower.setReturnSpeed(-0.3);
-            // setup constants joystick buttons.  For safety, I'd like 2 buttons to be pressed to
-            // initiate thrower. Use buttons at base on left and right hand side of stick so it
-            // takes two hands to initiate a throw.  This will be temporary, while we test/tune.
+            System.out.print(Timer.getFPGATimestamp() + "pos:" + thrower.position() );
+            System.out.println(", status " + thrower.getStatus()+ ", arc "+thrower.getThrowArc());
+            thrower.setThrowSpeed(ds.getAnalogIn(1)/5);
+            thrower.setThrowArc((int)(ds.getAnalogIn(2)/5 * 300));
+            thrower.setReturnSpeed(-0.2);
+            if (leftstick.getRawButton(Constants.JB_RESET_ENCODER)) {
+                thrower.zeroEncoder();
+            }
+            
             if (leftstick.getRawButton(Constants.JB_INIT_THROW_1) && leftstick.getRawButton(Constants.JB_INIT_THROW_2)) {
                 // What is the proper case presentation for methods.  Should this be 'throw()'?
                 thrower.Throw();
