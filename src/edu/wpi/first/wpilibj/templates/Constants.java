@@ -41,7 +41,8 @@ public class Constants {
     static Talon rearRight = new Talon(PWM_DRIVE_REAR_RIGHT);
         
     // Joysticks
-    public static final int JB_DRIVE_SLOW = 2;
+    public static final int JB_DRIVE_SLOW = 1;
+    public static final int JB_THROWER_ENCODER_RESET = 2;
     public static final int JB_INIT_THROW_1 = 7;
     public static final int JB_INIT_THROW_2 = 10;
     
@@ -53,7 +54,7 @@ public class Constants {
     static double[] throwerSpeedVals = new double[10];
     static int[] throwerArcVals = new int[10];
     int[] throwerDistanceVals = new int[10];
-    public static final int THROWER_STATUS_IDLE = 0;
+    public static final int THROWER_STATUS_HOME = 0;
     public static final int THROWER_STATUS_THROW = 1;
     public static final int THROWER_STATUS_STOW = 2;
     

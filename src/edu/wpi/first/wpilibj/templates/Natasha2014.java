@@ -43,26 +43,33 @@ public class Natasha2014 extends SimpleRobot {
         System.out.println("Teleop...");
         dt.setSafetyEnabled(true);
         while(isOperatorControl() && isEnabled()){
+            // *** Drive
             if (leftstick.getRawButton(Constants.JB_DRIVE_SLOW)) {
                 dt.arcadeDrive(leftstick.getY() * .7, leftstick.getX() * .5);
             } else {
                 dt.arcadeDrive(leftstick.getY(), leftstick.getX() * .7);
             }
             // *** Thrower
-            System.out.print(Timer.getFPGATimestamp() + "pos:" + thrower.position() );
-            System.out.println(", status " + thrower.getStatus()+ ", arc "+thrower.getThrowArc());
             thrower.setThrowSpeed(ds.getAnalogIn(1)/5);
             thrower.setThrowArc((int)(ds.getAnalogIn(2)/5 * 300));
-            thrower.setReturnSpeed(-0.2);
-            if (leftstick.getRawButton(Constants.JB_RESET_ENCODER)) {
-                thrower.zeroEncoder();
+            thrower.setStowSpeed(-0.2);
+
+            System.out.print(Timer.getFPGATimestamp() );
+            System.out.print("pos:" + thrower.position() );
+            System.out.print("status: " + thrower.getStatus() );
+            System.out.println("arc: " + thrower.getThrowArc() );
+            
+            if (leftstick.getRawButton(Constants.JB_THROWER_ENCODER_RESET)) {
+                thrower.resetEncoder();
             }
             
-            if (leftstick.getRawButton(Constants.JB_INIT_THROW_1) && leftstick.getRawButton(Constants.JB_INIT_THROW_2)) {
-                // What is the proper case presentation for methods.  Should this be 'throw()'?
-                thrower.Throw();
+            if (leftstick.getRawButton(Constants.JB_INIT_THROW_1) &&
+                  leftstick.getRawButton(Constants.JB_INIT_THROW_2) ) {
+                thrower.startThrow();
             }
             thrower.update();
+            // *** Sonar
+            
             
             Timer.delay(Constants.TELEOP_LOOP_DELAY_SECS);
         }        
