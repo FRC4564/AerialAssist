@@ -115,7 +115,7 @@ public class Throweraterenator {
     private void updateStow() {
         if (position() > 1) {
             setMotors(stowSpeed);
-        } else if (position() < 1) {
+        } else if (position() < -1) {
             setMotors(-stowSpeed);
         } else {
             setMotors(0);

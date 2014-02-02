@@ -55,9 +55,9 @@ public class Natasha2014 extends SimpleRobot {
             thrower.setStowSpeed(-0.2);
 
             System.out.print(Timer.getFPGATimestamp() );
-            System.out.print("pos:" + thrower.position() );
-            System.out.print("arc: " + thrower.getThrowArc() );
-            System.out.println("status: " + thrower.getStatus() );
+            System.out.print(" pos:" + thrower.position() );
+            System.out.print(" arc: " + thrower.getThrowArc() );
+            System.out.println(" status: " + thrower.getStatus() );
             
             if (leftstick.getRawButton(Constants.JB_THROWER_ENCODER_RESET)) {
                 thrower.resetEncoder();
