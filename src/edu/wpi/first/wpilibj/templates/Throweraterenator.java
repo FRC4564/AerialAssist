@@ -10,6 +10,14 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 
+
+
+
+
+    
+
+        
+
 /**
  *
  * @author TheGreenBox
@@ -23,6 +31,16 @@ public class Throweraterenator {
     private int arc = 0;
     private Encoder encoder = new Encoder(Constants.DIO_THROWER_ENCODER_A, 
             Constants.DIO_THROWER_ENCODER_B, false, EncodingType.k4X);
+
+    java.util.Timer timer;
+    class stopThrowerTask extends java.util.TimerTask {
+        public void run() {
+            if (encoder.get() >= arc) {
+                setMotors(0);
+                status = Constants.THROWER_STATUS_STOW;
+            }
+        }
+    }
     
     public Throweraterenator() {
         encoder.start();
@@ -85,6 +103,10 @@ public class Throweraterenator {
     public void startThrow() {
         if (status == Constants.THROWER_STATUS_HOME) {
             status = Constants.THROWER_STATUS_THROW;
+        //Launch task to stop thrower when target pos is reached
+ //       timer = new java.util.Timer();    
+ //       timer.schedule(new stopThrowerTask(), 0, 200);  
+        
         }
     }
     
@@ -97,7 +119,7 @@ public class Throweraterenator {
         } else if (position() != 0) {
                 updateStow();
         }
-        
+
     }
     
     private void updateThrow() {

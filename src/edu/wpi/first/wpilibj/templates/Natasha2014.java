@@ -22,8 +22,10 @@ public class Natasha2014 extends SimpleRobot {
     
     DriverStation ds;
     // Can we get this long line to be split onto 2 lines, for readability?
-    DriveTrain dt = new DriveTrain(Constants.frontLeft, Constants.rearLeft, Constants.frontRight, Constants.rearRight);
+    DriveTrain dt = new DriveTrain(Constants.frontLeft, Constants.rearLeft,
+                                   Constants.frontRight, Constants.rearRight);
     Throweraterenator thrower = new Throweraterenator();
+    SinisterSonar sonar = new SinisterSonar();
     
     private Jaguar motorTail = new Jaguar(Constants.PWM_TAIL);
 
@@ -61,6 +63,7 @@ public class Natasha2014 extends SimpleRobot {
             System.out.print(Timer.getFPGATimestamp() );
             System.out.print(" pos:" + thrower.position() );
             System.out.print(" arc: " + thrower.getThrowArc() );
+            System.out.print(" sonar: " + sonar.getDistance() );
             System.out.println(" status: " + thrower.getStatus() );
             
             if (leftstick.getRawButton(Constants.JB_THROWER_ENCODER_RESET)) {
