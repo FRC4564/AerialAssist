@@ -22,6 +22,7 @@ public class Constants {
     public static final int PWM_DRIVE_REAR_RIGHT = 4;
     public static final int PWM_THROWER_RIGHT = 5;
     public static final int PWM_THROWER_LEFT = 6;
+    public static final int PWM_TAIL = 7;
     
     // DIOs
     public static final int DIO_THROWER_ENCODER_A = 1;
@@ -45,6 +46,8 @@ public class Constants {
     public static final int JB_THROWER_ENCODER_RESET = 2;
     public static final int JB_INIT_THROW_1 = 7;
     public static final int JB_INIT_THROW_2 = 10;
+    public static final int JB_TAIL_EXTEND = 4;
+    public static final int JB_TAIL_RETRACT = 5;
     
     
     // Miscellaneous
@@ -64,4 +67,7 @@ public class Constants {
     public static final int SONIC_BALANCE_RIGHT = 1;
     public static final int SONIC_BALANCE_LEFT = 2;
 
+    //Scorpion Tail
+
+    
 }

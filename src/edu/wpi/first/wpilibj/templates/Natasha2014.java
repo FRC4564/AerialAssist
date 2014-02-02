@@ -9,6 +9,7 @@ package edu.wpi.first.wpilibj.templates;
 
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.SimpleRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
@@ -23,6 +24,9 @@ public class Natasha2014 extends SimpleRobot {
     // Can we get this long line to be split onto 2 lines, for readability?
     DriveTrain dt = new DriveTrain(Constants.frontLeft, Constants.rearLeft, Constants.frontRight, Constants.rearRight);
     Throweraterenator thrower = new Throweraterenator();
+    
+    private Jaguar motorTail = new Jaguar(Constants.PWM_TAIL);
+
     
     protected void robotInit() {
        System.out.println("RobotInit...");
@@ -69,6 +73,15 @@ public class Natasha2014 extends SimpleRobot {
             }
             thrower.update();
             // *** Sonar
+            
+            // *** Scorpion Tail
+            if (leftstick.getRawButton(Constants.JB_TAIL_EXTEND)){
+                motorTail.set(-(ds.getAnalogIn(3)/5));
+            } else if (leftstick.getRawButton(Constants.JB_TAIL_RETRACT)) {
+                motorTail.set((ds.getAnalogIn(3)/5));
+            } else {
+                motorTail.set(0);
+            }
             
             
             Timer.delay(Constants.TELEOP_LOOP_DELAY_SECS);
