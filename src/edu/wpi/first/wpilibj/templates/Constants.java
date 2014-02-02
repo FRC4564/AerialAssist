@@ -16,10 +16,10 @@ import edu.wpi.first.wpilibj.Talon;
 public class Constants {
     
     // PWMs
-    public static final int PWM_DRIVE_FRONT_LEFT = 4;
-    public static final int PWM_DRIVE_REAR_LEFT = 3;
-    public static final int PWM_DRIVE_FRONT_RIGHT = 2;
-    public static final int PWM_DRIVE_REAR_RIGHT = 1;
+    public static final int PWM_DRIVE_FRONT_LEFT = 1;
+    public static final int PWM_DRIVE_REAR_LEFT = 2;
+    public static final int PWM_DRIVE_FRONT_RIGHT = 3;
+    public static final int PWM_DRIVE_REAR_RIGHT = 4;
     public static final int PWM_THROWER_RIGHT = 5;
     public static final int PWM_THROWER_LEFT = 6;
     
@@ -57,7 +57,8 @@ public class Constants {
     public static final int THROWER_STATUS_HOME = 0;
     public static final int THROWER_STATUS_THROW = 1;
     public static final int THROWER_STATUS_STOW = 2;
-    
+    public static final int THROWER_STATUS_INIT = 3;
+
     //Sonic constants
     public static final int SONIC_BALANCE_EQUAL = 0;
     public static final int SONIC_BALANCE_RIGHT = 1;
