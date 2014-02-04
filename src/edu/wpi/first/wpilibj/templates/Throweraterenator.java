@@ -11,13 +11,6 @@ import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 
 
-
-
-
-    
-
-        
-
 /**
  *
  * @author TheGreenBox
@@ -32,10 +25,14 @@ public class Throweraterenator {
     private Encoder encoder = new Encoder(Constants.DIO_THROWER_ENCODER_A, 
             Constants.DIO_THROWER_ENCODER_B, false, EncodingType.k4X);
 
+    // This timer task is dedicated to stopping the thrower at the target arc position
+    // 'timer' will be scheduled to run this at a highspeed rate that doesn't overtax
+    // the cRIO.
+    // Once started timer schedule will remain running unless programatically stopped. 
     java.util.Timer timer;
     class stopThrowerTask extends java.util.TimerTask {
         public void run() {
-            if (encoder.get() >= arc) {
+            if (status == Constants.THROWER_STATUS_THROW && encoder.get() >= arc) {
                 setMotors(0);
                 status = Constants.THROWER_STATUS_STOW;
             }
@@ -95,6 +92,13 @@ public class Throweraterenator {
         encoder.reset();
         encoder.start();
     }
+
+
+    public voic initThrower() {
+        //Schedule timer task to stop thrower when target pos is reached
+        timer = new java.util.Timer();    
+        timer.schedule(new stopThrowerTask(), 0, 5);  // set to run every 5ms  
+        //
     
     
     /** Initiate a throw at currently set speed and arc.
@@ -103,9 +107,6 @@ public class Throweraterenator {
     public void startThrow() {
         if (status == Constants.THROWER_STATUS_HOME) {
             status = Constants.THROWER_STATUS_THROW;
-        //Launch task to stop thrower when target pos is reached
- //       timer = new java.util.Timer();    
- //       timer.schedule(new stopThrowerTask(), 0, 200);  
         
         }
     }
