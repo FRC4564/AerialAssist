@@ -31,9 +31,10 @@ public class Natasha2014 extends SimpleRobot {
 
     
     protected void robotInit() {
-       System.out.println("RobotInit...");
-       ds = DriverStation.getInstance();
-       dt.setMotorsInverted();
+        System.out.println("RobotInit...");
+        ds = DriverStation.getInstance();
+        dt.setMotorsInverted();
+        thrower.initThrower();
     }
 
     
