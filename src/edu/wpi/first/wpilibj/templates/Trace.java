@@ -30,11 +30,11 @@ public class Trace {
         }
     }
     
-    public void add(int pos, int arc, int status) {
+    public void add() {
         traceArray[0][traceCount] = Timer.getFPGATimestamp() - traceStartTime;
-        traceArray[1][traceCount] = pos;
-        traceArray[2][traceCount] = arc;
-        traceArray[3][traceCount] = status;
+        traceArray[1][traceCount] = Natasha2014.thrower.position();
+        traceArray[2][traceCount] = Natasha2014.thrower.getThrowArc();
+        traceArray[3][traceCount] = Natasha2014.thrower.getStatus();
         traceCount++;
     }
     

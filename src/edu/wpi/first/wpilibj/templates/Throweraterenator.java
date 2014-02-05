@@ -7,8 +7,9 @@
 package edu.wpi.first.wpilibj.templates;
 
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Jaguar;
+import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
+import edu.wpi.first.wpilibj.Timer;
 
 
 /**
@@ -16,14 +17,17 @@ import edu.wpi.first.wpilibj.CounterBase.EncodingType;
  * @author TheGreenBox
  */
 public class Throweraterenator {
-    private Jaguar motorRight = new Jaguar(Constants.PWM_THROWER_RIGHT);
-    private Jaguar motorLeft = new Jaguar(Constants.PWM_THROWER_LEFT);
+    private Victor motorRight = new Victor(Constants.PWM_THROWER_RIGHT);
+    private Victor motorLeft = new Victor(Constants.PWM_THROWER_LEFT);
     private double throwSpeed = 0;
     private double stowSpeed = 0;
     private int status = 0;
     private int arc = 0;
+    private double initTime = 0;
+    private int prevPosition = 0;
     private Encoder encoder = new Encoder(Constants.DIO_THROWER_ENCODER_A, 
             Constants.DIO_THROWER_ENCODER_B, false, EncodingType.k4X);
+    private Trace trace = new Trace();
 
     // This timer task is dedicated to stopping the thrower at the target arc position
     // 'timer' will be scheduled to run this at a highspeed rate that doesn't overtax
@@ -93,13 +97,31 @@ public class Throweraterenator {
         encoder.start();
     }
 
+    public double updateInit() {
+        if (Timer.getFPGATimestamp() - initTime >= Constants.COUNTDOWN_TIME) {
+            initTime = Timer.getFPGATimestamp();
+            if (position() == prevPosition) {
+                setMotors(0);
+                encoder.reset();
+                status = Constants.THROWER_STATUS_HOME;
+            } else { 
+                prevPosition = position();
+            }
+        }
+        
+        return 0;
+    }
 
-    public voic initThrower() {
+    public void initThrower() {
         //Schedule timer task to stop thrower when target pos is reached
+        status = Constants.THROWER_STATUS_INIT;
+        initTime = Timer.getFPGATimestamp();
+        setMotors(stowSpeed);
+        prevPosition = position();
         timer = new java.util.Timer();    
         timer.schedule(new stopThrowerTask(), 0, 5);  // set to run every 5ms  
         //
-    
+    }
     
     /** Initiate a throw at currently set speed and arc.
        Throw will only initiate if in home position.
@@ -107,7 +129,8 @@ public class Throweraterenator {
     public void startThrow() {
         if (status == Constants.THROWER_STATUS_HOME) {
             status = Constants.THROWER_STATUS_THROW;
-        
+            trace.start();
+            trace.add();
         }
     }
     
@@ -117,8 +140,10 @@ public class Throweraterenator {
     public void update() {
         if (getStatus() == Constants.THROWER_STATUS_THROW) {
             updateThrow();
+        } else if (getStatus() == Constants.THROWER_STATUS_INIT) {
+            updateInit();
         } else if (position() != 0) {
-                updateStow();
+            updateStow();
         }
 
     }
@@ -129,6 +154,12 @@ public class Throweraterenator {
         } else {
             setMotors(0);
             status = Constants.THROWER_STATUS_STOW;
+        }
+        if (trace.count() > 1) {
+            trace.add();
+        } 
+        if (trace.count() > 50) {
+            trace.print();
         }
     }
     

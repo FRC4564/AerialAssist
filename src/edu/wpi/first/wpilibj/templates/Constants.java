@@ -61,6 +61,7 @@ public class Constants {
     public static final int THROWER_STATUS_THROW = 1;
     public static final int THROWER_STATUS_STOW = 2;
     public static final int THROWER_STATUS_INIT = 3;
+    public static final double COUNTDOWN_TIME = 0.25;
 
     //Sonic constants
     public static final int SONIC_BALANCE_EQUAL = 0;
