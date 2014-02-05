@@ -39,6 +39,7 @@ public class Throweraterenator {
             if (status == Constants.THROWER_STATUS_THROW && encoder.get() >= arc) {
                 setMotors(0);
                 status = Constants.THROWER_STATUS_STOW;
+                System.out.println("Thrower task stopped throw");
             }
         }
     }
@@ -130,7 +131,7 @@ public class Throweraterenator {
         if (status == Constants.THROWER_STATUS_HOME) {
             status = Constants.THROWER_STATUS_THROW;
             trace.start();
-            trace.add();
+            trace.add(position(), getThrowArc(), getStatus());
         }
     }
     
@@ -156,7 +157,7 @@ public class Throweraterenator {
             status = Constants.THROWER_STATUS_STOW;
         }
         if (trace.count() > 1) {
-            trace.add();
+            trace.add(position(), getThrowArc(), getStatus());
         } 
         if (trace.count() > 50) {
             trace.print();

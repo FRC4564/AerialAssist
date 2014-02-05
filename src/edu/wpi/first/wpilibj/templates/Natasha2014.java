@@ -24,7 +24,7 @@ public class Natasha2014 extends SimpleRobot {
     // Can we get this long line to be split onto 2 lines, for readability?
     DriveTrain dt = new DriveTrain(Constants.frontLeft, Constants.rearLeft,
                                    Constants.frontRight, Constants.rearRight);
-    static Throweraterenator thrower = new Throweraterenator();
+    Throweraterenator thrower = new Throweraterenator();
     SinisterSonar sonar = new SinisterSonar();
     
     private Jaguar motorTail = new Jaguar(Constants.PWM_TAIL);
@@ -61,12 +61,12 @@ public class Natasha2014 extends SimpleRobot {
             thrower.setThrowArc((int)(ds.getAnalogIn(2)/5 * 300));
             thrower.setStowSpeed(-0.2);
 
-            System.out.print(Timer.getFPGATimestamp() );
+            /*System.out.print(Timer.getFPGATimestamp() );
             System.out.print(" pos:" + thrower.position() );
             System.out.print(" arc: " + thrower.getThrowArc() );
             System.out.print(" sonar: " + sonar.getDistance() );
             System.out.println(" status: " + thrower.getStatus() );
-            
+            */
             if (leftstick.getRawButton(Constants.JB_THROWER_ENCODER_RESET)) {
                 thrower.resetEncoder();
             }
@@ -96,6 +96,6 @@ public class Natasha2014 extends SimpleRobot {
      * This function is called once each time the robot enters test mode.
      */
     public void test() {
-    
+        thrower.initThrower();
     }
 }
