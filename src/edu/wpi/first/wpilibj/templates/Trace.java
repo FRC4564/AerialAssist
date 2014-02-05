@@ -35,7 +35,7 @@ public class Trace {
         traceArray[1][traceCount] = pos;
         traceArray[2][traceCount] = arc;
         traceArray[3][traceCount] = status;
-        traceCount++;
+        traceCount = traceCount + 1;
     }
     
     public int count() {
@@ -43,6 +43,7 @@ public class Trace {
     }
     
     public void print() {
+        System.out.println(traceCount);
         for (int i = 0; i <= traceCount; i++) {
             System.out.print(traceArray[0][i] + ", ");
             System.out.print(traceArray[1][i] + ", ");

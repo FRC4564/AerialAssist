@@ -120,7 +120,7 @@ public class Throweraterenator {
         setMotors(stowSpeed);
         prevPosition = position();
         timer = new java.util.Timer();    
-        timer.schedule(new stopThrowerTask(), 0, 5);  // set to run every 5ms  
+        timer.schedule(new stopThrowerTask(), 0, 2);  // set to run every 2ms  
         //
     }
     
@@ -139,6 +139,14 @@ public class Throweraterenator {
      *  Call this routine on a regular basis to service the thrower.
      */
     public void update() {
+        // Capture trace
+        if (trace.count() > 1) {
+            trace.add(position(), getThrowArc(), getStatus());
+        } 
+        if (trace.count() > 50) {
+            trace.print();
+        }
+        // Process status
         if (getStatus() == Constants.THROWER_STATUS_THROW) {
             updateThrow();
         } else if (getStatus() == Constants.THROWER_STATUS_INIT) {
@@ -155,12 +163,6 @@ public class Throweraterenator {
         } else {
             setMotors(0);
             status = Constants.THROWER_STATUS_STOW;
-        }
-        if (trace.count() > 1) {
-            trace.add(position(), getThrowArc(), getStatus());
-        } 
-        if (trace.count() > 50) {
-            trace.print();
         }
     }
     
