@@ -94,12 +94,12 @@ public class Throweraterenator {
     }
 
 
-    public voic initThrower() {
+    public void initThrower() {
         //Schedule timer task to stop thrower when target pos is reached
         timer = new java.util.Timer();    
         timer.schedule(new stopThrowerTask(), 0, 5);  // set to run every 5ms  
         //
-    
+    }
     
     /** Initiate a throw at currently set speed and arc.
        Throw will only initiate if in home position.
