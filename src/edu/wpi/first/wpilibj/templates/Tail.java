@@ -39,69 +39,69 @@ public class Tail {
         
     }
     
-    //**
-         Set stinger motor speed
-    **//
+    /**
+     *    Set stinger motor speed
+     */
     public void setStingerSpeed(double speed) {
         stingerSpeed = speed;
         stinger.set(stingerSpeed);
     }
     
-    //**
-         Current speed of stinger motor
-    **//
+    /**
+     *    Current speed of stinger motor
+     */
     public double getStingerSpeed() {
         return stingerSpeed;
     }
 
-    //**
-         Set base motor speed
-    **//    
+    /**
+     *     Set base motor speed
+     */   
     public void setBaseSpeed(double speed) {
         baseSpeed = speed;
         base.set(baseSpeed);
     }
 
-    //**
-         Current speed set on base motor
-    **//
+    /**
+     *      Current speed set on base motor
+     */
     public double getBaseSpeed() {
         return baseSpeed;
     }
 
-    //**
-         Angle of tail measured in volts from potentiometer
-    **//
+    /**
+     *     Angle of tail measured in volts from potentiometer
+     */
     public double getTheta() {
         theta = potentiometer.getVoltage();
         return theta;
     }
     
-    //**
-         Initiate tail extension
-    **//
+    /**
+     *    Initiate tail extension
+     */
     public void startExtend() {
         status = Constants.TAIL_STATUS_EXTENDING;
     }
 
-    //**
-         Initiate tail retraction
-    **//
+    /**
+     *     Initiate tail retraction
+     */
     public void startRetract() {
         status = Constants.TAIL_STATUS_RETRACTING;
     }
     
-    //**
-         Initiate ball ejection
-    **//
+    /**
+     *     Initiate ball ejection
+     */
     public void startEject() {
         status = Constants.TAIL_STATUS_EJECTING;
     }
     
-    //**
-         Update tail and stinger movement
-         Call every robot loop cycle.
-    **//
+    /**
+     *   Update tail and stinger movement
+     *   Call every robot loop cycle.
+     */
     public void update() {
         // tail movement
         if (status == Constants.TAIL_STATUS_RETRACTING) {
