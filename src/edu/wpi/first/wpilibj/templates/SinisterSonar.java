@@ -17,15 +17,20 @@ public class SinisterSonar {
     AnalogChannel sonicLeft = new AnalogChannel(Constants.ANA_SONIC_LEFT);
     AnalogChannel sonicRight = new AnalogChannel(Constants.ANA_SONIC_RIGHT);
     //constants
-    private static final double VI = 5.0 / 1024 * 2.54; //factor for volts per inch. (see Maxbotic docs)
-    private static final double variance = 12.0;   // Inches of variance for Balanced
+    private static final double VOLTS_PER_INCH = 5.0 / 1024 * 2.54; //factor for volts per inch. (see Maxbotic docs)
+    private static final double variance = 1.0;   // Variance, in feet, for Balanced
     //local variables
     private int balance;  // Balance is either Equal or favored Left-side or Right-side
 
-// Returns distance in feet
+    /**
+     * Returns distance in feet and sets 'balance'.
+     * If out of balance, distance will be to favored side (most distant).
+     * 
+     * @return Distance in feet
+     */ 
     public double getDistance (){
-        double distanceRight = sonicRight.getVoltage() / VI; //distance for right sensor in inches
-        double distanceLeft = sonicLeft.getVoltage() / VI; //distance for left sensor in inches
+        double distanceRight = getRightDistance(); 
+        double distanceLeft = getLeftDistance(); 
         double distance;
 
         double difference = Math.abs(distanceLeft-distanceRight);
@@ -44,7 +49,26 @@ public class SinisterSonar {
         return distance / 12.0;  //conversion to feet from inches
     }
     
-    //Returns which sensor is favored, or Equal if both are closely balanced
+    /**
+     * Get left sonar distance in feet
+     */
+    public double getLeftDistance() {
+        return sonicRight.getVoltage() / VOLTS_PER_INCH / 12;
+    }
+    
+    /**
+     * Get right sonar distance in feet
+     */
+    public double getRightDistance() {
+        return sonicRight.getVoltage() / VOLTS_PER_INCH / 12;
+    }
+    
+    /**
+     * Returns which sensor is favored or balanced.
+     * 
+     * @return Constants.SONIC_BALANCE_EQUAL,Constants.SONIC_BALANCE_LEFT,
+     * or Constants.SONIC_BALANCE_RIGHT
+     */
     public int getBalance () {
         return balance;
         //int balance; // Returns which sensor is being used

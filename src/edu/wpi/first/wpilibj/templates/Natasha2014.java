@@ -12,20 +12,19 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SimpleRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Natasha2014 extends SimpleRobot {
     
     Joystick leftstick = new Joystick(1);
     Joystick rightstick = new Joystick(2);
-    
-    
-    DriverStation ds;
-    // Can we get this long line to be split onto 2 lines, for readability?
     DriveTrain dt = new DriveTrain(Constants.frontLeft, Constants.rearLeft,
                                    Constants.frontRight, Constants.rearRight);
     Throweraterenator thrower = new Throweraterenator();
     Tail tail = new Tail();
     SinisterSonar sonar = new SinisterSonar();
+    DriverStation ds;
+    SmartDashboard DashData = new SmartDashboard();
 
     /** 
      * Robot Initialization upon boot
@@ -86,7 +85,8 @@ public class Natasha2014 extends SimpleRobot {
             tail.update();
 
             // SONAR
-
+            SmartDashboard.putNumber("Left dist",sonar.getLeftDistance());
+            SmartDashboard.putNumber("Right dist",sonar.getRightDistance());
             
             // DEBUG
             System.out.println(tail.getTheta());
