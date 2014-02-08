@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.Jaguar;
  */
 public class Tail {
     
-    private double status;
+    private int status;
     private double theta;
     private double stingerSpeed;
     private double baseSpeed;
@@ -75,6 +75,10 @@ public class Tail {
     public double getTheta() {
         theta = potentiometer.getVoltage();
         return theta;
+    }
+    
+    public int getStatus() {
+        return status;
     }
     
     /**

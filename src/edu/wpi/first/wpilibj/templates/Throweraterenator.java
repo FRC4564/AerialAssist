@@ -19,14 +19,21 @@ import edu.wpi.first.wpilibj.Timer;
 public class Throweraterenator {
     private Victor motorRight = new Victor(Constants.PWM_THROWER_RIGHT);
     private Victor motorLeft = new Victor(Constants.PWM_THROWER_LEFT);
+    
+    private Encoder encoder = new Encoder(Constants.DIO_THROWER_ENCODER_A, 
+            Constants.DIO_THROWER_ENCODER_B, false, EncodingType.k4X);
+     
+    private double motorsSpeed = 0; // Current thrower motors speed
     private double throwSpeed = 0;
     private double stowSpeed = 0;
     private int status = 0;
     private int arc = 0;
+    
+    // Initialization variables
     private double initTime = 0;
-    private int prevPosition = 0;
-    private Encoder encoder = new Encoder(Constants.DIO_THROWER_ENCODER_A, 
-            Constants.DIO_THROWER_ENCODER_B, false, EncodingType.k4X);
+    private int initPosition = 0;
+    
+    // Trace statistics for tuning
     private Trace trace = new Trace();
 
     // This timer task is dedicated to stopping the thrower at the target arc position
@@ -49,35 +56,52 @@ public class Throweraterenator {
         encoder.reset();
     }
     
+    /** Set motors based on 'speed' and preserve in 'motorsSpeed'.
+     *  Motors must run counter to one another.
+     */
     private void setMotors(double speed) {
-        motorRight.set(-speed);
-        motorLeft.set(speed);
+        motorsSpeed = speed;
+        motorRight.set(-motorsSpeed);
+        motorLeft.set(motorsSpeed);
     }
     
+    /**
+     *  Set speed at which throw will occur.
+     * 
+     * @param speed
+     */
     public void setThrowSpeed(double speed) {
         throwSpeed = speed;
     }
     
-    /** Speed at which thrower motors will throw 
+    /** 
+     *  Speed at which thrower motors will throw 
      * 
-     * @return 0.0 to 1.0
+     * @return throwSpeed
      */
     public double getThrowSpeed() {
         return throwSpeed;
     }
     
+    /** 
+     * Set speed at which arm will be stowed.
+     */
     public void setStowSpeed(double speed) {
         stowSpeed = speed;
     }
     
+    /** Speed at which are will be stowed.
+     * 
+     * @return stowSpeed 
+     */
     public double getStowSpeed() {
         return stowSpeed;
     }
     
-    public int getStatus() {
-        return status;
-    }
-    
+    /** Set the throw arc based on targeted encoder count.
+     * 
+     * @param value - Encoder target count
+     */
     public void setThrowArc(int value) {
         arc = value;
     }
@@ -86,6 +110,15 @@ public class Throweraterenator {
         return arc;
     }
     
+    
+    public int getStatus() {
+        return status;
+    }
+        
+    /**
+     *  Current arm position based on encoder.
+     * @return Encoder count
+     */
     public int position() {
         return encoder.get();
     }
@@ -95,44 +128,30 @@ public class Throweraterenator {
      */
     public void resetEncoder() {
         encoder.reset();
-        encoder.start();
     }
 
-    public double updateInit() {
-        if (Timer.getFPGATimestamp() - initTime >= Constants.COUNTDOWN_TIME) {
-            if (position() == prevPosition) {
-                setMotors(0);
-                encoder.reset();
-                status = Constants.THROWER_STATUS_HOME;
-            } else { 
-                initTime = Timer.getFPGATimestamp();
-                prevPosition = position();
-            }
-        }
-        
-        return 0;
-    }
-
+    /** Call once, when robot initializes.
+     *  Sets thrower into initialization mode, which will locate Home position.
+     *  Also launches scheduled timer task to control throwing arc.
+     */
     public void initThrower() {
-        //Schedule timer task to stop thrower when target pos is reached
+        encoder.start();
+        //Start finding Home position
         status = Constants.THROWER_STATUS_INIT;
-        initTime = Timer.getFPGATimestamp();
-        prevPosition = position();
-        setMotors(stowSpeed);
-        
+        //Schedule timer task to stop thrower when target pos is reached       
         timer = new java.util.Timer();    
         timer.schedule(new stopThrowerTask(), 0, 2);  // set to run every 2ms  
-        //
     }
     
     /** Initiate a throw at currently set speed and arc.
-       Throw will only initiate if in home position.
-    **/
+     *  Throw will only initiate if Thrower and Scorpion Tail are
+     *  at Home position.
+     */
     public void startThrow() {
         if (status == Constants.THROWER_STATUS_HOME) {
-            status = Constants.THROWER_STATUS_THROW;
-            trace.start();
-            trace.add(position(), getThrowArc(), getStatus());
+             status = Constants.THROWER_STATUS_THROW;
+             trace.start();
+             trace.add(position(), getThrowArc(), getStatus());
         }
     }
     
@@ -147,17 +166,55 @@ public class Throweraterenator {
         if (trace.count() > 50) {
             trace.print();
         }
-        // Process status
-        if (getStatus() == Constants.THROWER_STATUS_THROW) {
-            updateThrow();
-        } else if (getStatus() == Constants.THROWER_STATUS_INIT) {
+        // Process Thrower status
+        if (status == Constants.THROWER_STATUS_INIT) {
             updateInit();
+        } else if (status == Constants.THROWER_STATUS_THROW) {
+            updateThrow();
         } else if (position() != 0) {
             updateStow();
         }
 
     }
+
     
+    /**
+     *  During initialization, find the thrower arm home position by slowly
+     *  moving downward until it stops moving.  Ever 1/4 second, check to
+     *  see if arm position has changed.  Once it stops, motors will be
+     *  stopped and another 1/4 second delay will let the arm settle.  The
+     *  encoder is then zeroed and arm status is changed to Home.
+     */
+    private void updateInit() {
+        // Is initialization just starting?
+        if (initTime == 0 ) {   // let's get started.
+            initTime = Timer.getFPGATimestamp();
+            initPosition = position();
+            setMotors(stowSpeed);
+        } else {
+            // Every 1/4 second, recheck initialization progress.
+            if (Timer.getFPGATimestamp() - initTime >= 0.25) {
+                // If the arm hasn't moved
+                if (position() == initPosition) {
+                    // Stop the motors, if not already stopped.
+                    if (motorsSpeed == 0) {
+                        setMotors(0);
+                    // Arm is stopped and settled -- we're home
+                    } else {
+                        resetEncoder();
+                        status = Constants.THROWER_STATUS_HOME;
+                    }
+                }
+                initTime = Timer.getFPGATimestamp();
+                initPosition = position();
+            }
+        }     
+    }
+  
+    /**
+     * Update throwing arm and switch to Stow once target arc reached.
+     * The timerTask is also watching for target arc, and stopping throw.
+     */
     private void updateThrow() {
         if (position() < arc) {
             setMotors(throwSpeed);
@@ -167,8 +224,9 @@ public class Throweraterenator {
         }
     }
     
-    /** Return thrower to home position (+/- 1).  
-     *  Values either above or below zero will cause the arm to move
+    
+    /**
+     * Return thrower to home position.  
      */ 
     private void updateStow() {
         if (position() > 1) {
@@ -180,13 +238,15 @@ public class Throweraterenator {
             status = Constants.THROWER_STATUS_HOME;
         }
     }
+
+
     
     private boolean inRange(){
         return true;
     }
     
     /** Sets speed and arc parameters given target distance in feet.
-     *  If the distance is out of range of the thrower then
+     *  If the distance is out of throwing range then
      *  no changes will be made and 'false' will be returned.
      * 
      * @param distance decimal feet to target

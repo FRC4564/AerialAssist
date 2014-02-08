@@ -9,7 +9,6 @@ package edu.wpi.first.wpilibj.templates;
 
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.SimpleRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
@@ -27,58 +26,54 @@ public class Natasha2014 extends SimpleRobot {
     Throweraterenator thrower = new Throweraterenator();
     Tail tail = new Tail();
     SinisterSonar sonar = new SinisterSonar();
-    
-    //private Jaguar motorTail = new Jaguar(Constants.PWM_TAIL);
 
-    
+    /** 
+     * Robot Initialization upon boot
+     */
     protected void robotInit() {
         System.out.println("RobotInit...");
         ds = DriverStation.getInstance();
         dt.setMotorsInverted();
+
+        thrower.setStowSpeed(-0.3);
         thrower.initThrower();
     }
 
-    
+    /**
+     * This function is called once, when Autonomous mode is enabled.
+     */
     public void autonomous() {
         
     }
 
 
     /**
-     * This function is called once each time the robot enters operator control.
+     * This function is called while Teleop mode is enabled.
      */
     public void operatorControl() {
         System.out.println("Teleop...");
         dt.setSafetyEnabled(true);
         while(isOperatorControl() && isEnabled()){
-            // *** Drive
-            if (leftstick.getRawButton(Constants.JB_DRIVE_SLOW)) {
-                dt.arcadeDrive(leftstick.getY() * .7, leftstick.getX() * .5);
-            } else {
-                dt.arcadeDrive(leftstick.getY() * -1, leftstick.getX() * .7);
-            }
-            // *** Thrower
+            
+            // DRIVETRAIN
+            dt.arcadeDrive(leftstick.getY() * -1, leftstick.getX() * .7);
+            
+            // THROWER
             thrower.setThrowSpeed(ds.getAnalogIn(1)/5);
-            thrower.setThrowArc((int)(ds.getAnalogIn(2)/5 * 300));
-            thrower.setStowSpeed(-0.3);
-
-            /*System.out.print(Timer.getFPGATimestamp() );
-            System.out.print(" pos:" + thrower.position() );
-            System.out.print(" arc: " + thrower.getThrowArc() );
-            System.out.print(" sonar: " + sonar.getDistance() );
-            System.out.println(" status: " + thrower.getStatus() );
-            */
+            thrower.setThrowArc((int)(ds.getAnalogIn(2)/5 * 130));
+            // manual encoder reset
             if (leftstick.getRawButton(Constants.JB_THROWER_ENCODER_RESET)) {
                 thrower.resetEncoder();
             }
+            // A throw requires two JB buttons and the tail to be retracted.
             if (leftstick.getRawButton(Constants.JB_INIT_THROW_1) &&
-                  leftstick.getRawButton(Constants.JB_INIT_THROW_2) ) {
+                  leftstick.getRawButton(Constants.JB_INIT_THROW_2) &&
+                  tail.getStatus() == Constants.TAIL_STATUS_RETRACTED) {
                 thrower.startThrow();
             }
             thrower.update();
-            // *** Sonar
-            
-            // *** Scorpion Tail
+                      
+            // SCORPION TAIL
             if (leftstick.getRawButton(Constants.JB_TAIL_EXTEND)) {
                 tail.startExtend();
             }
@@ -89,8 +84,19 @@ public class Natasha2014 extends SimpleRobot {
                 tail.startEject();
             }
             tail.update();
-            System.out.println(tail.getTheta());
+
+            // SONAR
+
             
+            // DEBUG
+            System.out.println(tail.getTheta());
+            /*System.out.print(Timer.getFPGATimestamp() );
+            System.out.print(" pos:" + thrower.position() );
+            System.out.print(" arc: " + thrower.getThrowArc() );
+            System.out.print(" sonar: " + sonar.getDistance() );
+            System.out.println(" status: " + thrower.getStatus() );
+            */
+ 
             Timer.delay(Constants.TELEOP_LOOP_DELAY_SECS);
         }        
 
@@ -100,6 +106,6 @@ public class Natasha2014 extends SimpleRobot {
      * This function is called once each time the robot enters test mode.
      */
     public void test() {
-        thrower.initThrower();
+
     }
 }

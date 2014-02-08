@@ -42,7 +42,8 @@ public class Constants {
     static Talon rearLeft = new Talon(PWM_DRIVE_REAR_LEFT);
     static Talon frontRight = new Talon(PWM_DRIVE_FRONT_RIGHT);
     static Talon rearRight = new Talon(PWM_DRIVE_REAR_RIGHT);
-        
+
+    
     // Joysticks
     public static final int JB_DRIVE_SLOW = 1;
     public static final int JB_THROWER_ENCODER_RESET = 2;
@@ -51,11 +52,11 @@ public class Constants {
     public static final int JB_TAIL_EXTEND = 4;
     public static final int JB_TAIL_RETRACT = 5;
     public static final int JB_TAIL_EJECT = 1;
-
-    
+ 
     
     // Miscellaneous
     public static final double TELEOP_LOOP_DELAY_SECS = .01;
+
     
     // Thrower parameters
     static double[] throwerSpeedVals = new double[10];
@@ -65,7 +66,6 @@ public class Constants {
     public static final int THROWER_STATUS_THROW = 1;
     public static final int THROWER_STATUS_STOW = 2;
     public static final int THROWER_STATUS_INIT = 3;
-    public static final double COUNTDOWN_TIME = 0.25;
 
     //Sonic constants
     public static final int SONIC_BALANCE_EQUAL = 0;
