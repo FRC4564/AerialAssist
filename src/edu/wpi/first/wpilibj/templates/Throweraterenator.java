@@ -100,12 +100,12 @@ public class Throweraterenator {
 
     public double updateInit() {
         if (Timer.getFPGATimestamp() - initTime >= Constants.COUNTDOWN_TIME) {
-            initTime = Timer.getFPGATimestamp();
             if (position() == prevPosition) {
                 setMotors(0);
                 encoder.reset();
                 status = Constants.THROWER_STATUS_HOME;
             } else { 
+                initTime = Timer.getFPGATimestamp();
                 prevPosition = position();
             }
         }
@@ -117,8 +117,9 @@ public class Throweraterenator {
         //Schedule timer task to stop thrower when target pos is reached
         status = Constants.THROWER_STATUS_INIT;
         initTime = Timer.getFPGATimestamp();
-        setMotors(stowSpeed);
         prevPosition = position();
+        setMotors(stowSpeed);
+        
         timer = new java.util.Timer();    
         timer.schedule(new stopThrowerTask(), 0, 2);  // set to run every 2ms  
         //

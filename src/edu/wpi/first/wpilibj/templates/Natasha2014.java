@@ -25,9 +25,10 @@ public class Natasha2014 extends SimpleRobot {
     DriveTrain dt = new DriveTrain(Constants.frontLeft, Constants.rearLeft,
                                    Constants.frontRight, Constants.rearRight);
     Throweraterenator thrower = new Throweraterenator();
+    Tail tail = new Tail();
     SinisterSonar sonar = new SinisterSonar();
     
-    private Jaguar motorTail = new Jaguar(Constants.PWM_TAIL);
+    //private Jaguar motorTail = new Jaguar(Constants.PWM_TAIL);
 
     
     protected void robotInit() {
@@ -54,12 +55,12 @@ public class Natasha2014 extends SimpleRobot {
             if (leftstick.getRawButton(Constants.JB_DRIVE_SLOW)) {
                 dt.arcadeDrive(leftstick.getY() * .7, leftstick.getX() * .5);
             } else {
-                dt.arcadeDrive(leftstick.getY(), leftstick.getX() * .7);
+                dt.arcadeDrive(leftstick.getY() * -1, leftstick.getX() * .7);
             }
             // *** Thrower
             thrower.setThrowSpeed(ds.getAnalogIn(1)/5);
             thrower.setThrowArc((int)(ds.getAnalogIn(2)/5 * 300));
-            thrower.setStowSpeed(-0.2);
+            thrower.setStowSpeed(-0.3);
 
             /*System.out.print(Timer.getFPGATimestamp() );
             System.out.print(" pos:" + thrower.position() );
@@ -78,14 +79,17 @@ public class Natasha2014 extends SimpleRobot {
             // *** Sonar
             
             // *** Scorpion Tail
-            if (leftstick.getRawButton(Constants.JB_TAIL_EXTEND)){
-                motorTail.set(-(ds.getAnalogIn(3)/5));
-            } else if (leftstick.getRawButton(Constants.JB_TAIL_RETRACT)) {
-                motorTail.set((ds.getAnalogIn(3)/5));
-            } else {
-                motorTail.set(0);
+            if (leftstick.getRawButton(Constants.JB_TAIL_EXTEND)) {
+                tail.startExtend();
             }
-            
+            if (leftstick.getRawButton(Constants.JB_TAIL_RETRACT)) {
+                tail.startRetract();
+            }
+            if (leftstick.getRawButton(Constants.JB_TAIL_EJECT)) {
+                tail.startEject();
+            }
+            tail.update();
+            System.out.println(tail.getTheta());
             
             Timer.delay(Constants.TELEOP_LOOP_DELAY_SECS);
         }        
