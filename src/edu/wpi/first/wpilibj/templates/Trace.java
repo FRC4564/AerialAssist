@@ -5,6 +5,7 @@
  */
 package edu.wpi.first.wpilibj.templates;
 
+import edu.wpi.first.wpilibj.AnalogChannel;
 import edu.wpi.first.wpilibj.Timer;
 
 /**
@@ -17,14 +18,15 @@ public class Trace {
     double[] tracePos = new double[500];
     double[] traceArc = new double[500];
     double[] traceStatus = new double[500];
-    double[][] traceArray = new double[][] {traceTime, tracePos, traceArc, traceStatus};
+    double[] traceVoltage = new double[500];
+    double[][] traceArray = new double[][] {traceTime, tracePos, traceArc, traceStatus, traceVoltage};
     private int traceNumber = 0;
     private int traceCount = 0;
     private double traceStartTime;
+    AnalogChannel voltage = new AnalogChannel(8);
     
     public void start() {
-        if (traceCount > 0) {
-            traceCount = 0;
+        if (traceCount == 0) {
             traceNumber++;
             traceStartTime = Timer.getFPGATimestamp();
         }
@@ -35,7 +37,8 @@ public class Trace {
         traceArray[1][traceCount] = pos;
         traceArray[2][traceCount] = arc;
         traceArray[3][traceCount] = status;
-        traceCount = traceCount + 1;
+        traceArray[4][traceCount] = voltage.getVoltage();
+        traceCount++;
     }
     
     public int count() {
@@ -43,12 +46,13 @@ public class Trace {
     }
     
     public void print() {
-        System.out.println(traceCount);
+        System.out.println("In trace number " + traceNumber + ", there were " + traceCount + " data points:");
         for (int i = 0; i <= traceCount; i++) {
             System.out.print(traceArray[0][i] + ", ");
             System.out.print(traceArray[1][i] + ", ");
             System.out.print(traceArray[2][i] + ", ");
-            System.out.println(traceArray[3][i]);
+            System.out.print(traceArray[3][i] + ", ");
+            System.out.println(traceArray[4][i]);
         }
         traceCount = 0;
     }
