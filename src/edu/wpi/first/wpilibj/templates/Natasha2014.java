@@ -106,6 +106,32 @@ public class Natasha2014 extends SimpleRobot {
      * This function is called once each time the robot enters test mode.
      */
     public void test() {
-
+        Vision vision = new Vision();
+        double startTime = Timer.getFPGATimestamp();
+        // drive forward
+        dt.setSafetyEnabled(true);
+        dt.arcadeDrive(.5,0);
+        Timer.delay(ds.getAnalogIn(1));
+        dt.arcadeDrive(0,0);
+        // Hot test
+        int hotCounter = 0;
+        while (Timer.getFPGATimestamp()< startTime + 4) {
+            if (vision.hot()) {
+                hotCounter ++;
+            }
+            else {
+                hotCounter --;
+            }
+            Timer.delay(0.1);
+        }
+        //Throw test
+        if (hotCounter > 0) {
+            System.out.println("Shooting");          
+        } else {
+            System.out.println("Not hot, waiting");
+            Timer.delay(2);
+            System.out.println("Shooting");
+        }
+        //Turn around
     }
 }

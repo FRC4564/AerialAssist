@@ -23,7 +23,7 @@ public class Trace {
     private int traceNumber = 0;
     private int traceCount = 0;
     private double traceStartTime;
-    AnalogChannel voltage = new AnalogChannel(8);
+//    AnalogChannel voltage = new AnalogChannel(8);
     
     public void start() {
         if (traceCount == 0) {
@@ -37,7 +37,7 @@ public class Trace {
         traceArray[1][traceCount] = pos;
         traceArray[2][traceCount] = arc;
         traceArray[3][traceCount] = status;
-        traceArray[4][traceCount] = voltage.getVoltage();
+        traceArray[4][traceCount] = 0; //voltage.getVoltage();
         traceCount++;
     }
     
