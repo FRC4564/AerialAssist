@@ -50,7 +50,7 @@ public class Throweraterenator {
             }
             if (trace.count() > 1) {
                 trace.add(position(), getThrowArc(), getStatus());
-        } 
+            } 
         }
     }
     
@@ -197,7 +197,7 @@ public class Throweraterenator {
                 // If the arm hasn't moved
                 if (position() == initPosition) {
                     // Stop the motors, if not already stopped.
-                    if (motorsSpeed == 0) {
+                    if (motorsSpeed != 0) {
                         setMotors(0);
                     // Arm is stopped and settled -- we're home
                     } else {
