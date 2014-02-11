@@ -73,10 +73,11 @@ public class Constants {
     public static final int SONIC_BALANCE_LEFT = 2;
 
     //Scorpion Tail
-    public static final int TAIL_STATUS_EXTENDED = 0;
-    public static final int TAIL_STATUS_RETRACTED = 1;
-    public static final int TAIL_STATUS_EXTENDING = 2;
-    public static final int TAIL_STATUS_RETRACTING = 3;
-    public static final int TAIL_STATUS_EJECTING = 4;
+    public static final int TAIL_STATUS_INIT = 0;
+    public static final int TAIL_STATUS_EXTENDED = 1;
+    public static final int TAIL_STATUS_RETRACTED = 2;
+    public static final int TAIL_STATUS_EXTENDING = 3;
+    public static final int TAIL_STATUS_RETRACTING = 4;
+    public static final int TAIL_STATUS_EJECTING = 5;
     
 }

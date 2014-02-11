@@ -15,14 +15,14 @@ import edu.wpi.first.wpilibj.Jaguar;
  */
 public class Tail {
     
-    private int status;
+    private int status = Constants.TAIL_STATUS_INIT;
     private double theta;
     private double stingerSpeed;
     private double baseSpeed;
     // potentiometer values
-    private double voltsExtended = 4.45;       // fully extended
-    private double voltsRetracted = 3.35;      // fully retracted
-    private double voltsEjectStinger = 3.57;   // stinger eject start 
+    private double voltsExtended = 4.59;       // fully extended
+    private double voltsRetracted = 3.45;      // fully retracted
+    private double voltsEjectStinger = 3.35 * 1.10;   // stinger eject start 
     private double voltsStingerStart = 3.8;    // stinger pickup start
     // tail base motor speeds at end points and direction
     private double beginRetractSpeed = -0.8;
@@ -113,6 +113,12 @@ public class Tail {
         } else if (status == Constants.TAIL_STATUS_EXTENDING
                 || status == Constants.TAIL_STATUS_EJECTING) {
             updateExtend();
+        } else if (status == Constants.TAIL_STATUS_INIT) {
+            if (getTheta() <= voltsRetracted) {
+                status = Constants.TAIL_STATUS_RETRACTED;
+            } else if (getTheta() >= voltsExtended) {
+                status = Constants.TAIL_STATUS_EXTENDED;
+            }
         } else {
             setBaseSpeed(0);
         }

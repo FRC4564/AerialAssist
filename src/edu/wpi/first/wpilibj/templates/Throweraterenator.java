@@ -44,7 +44,7 @@ public class Throweraterenator {
     class stopThrowerTask extends java.util.TimerTask {
         public void run() {
             if (status == Constants.THROWER_STATUS_THROW && encoder.get() >= arc) {
-                setMotors(0);
+                setMotors(stowSpeed);
                 status = Constants.THROWER_STATUS_STOW;
                 System.out.println("Thrower task stopped throw");
             }

@@ -89,11 +89,11 @@ public class Natasha2014 extends SimpleRobot {
             SmartDashboard.putNumber("Right dist",sonar.getRightDistance());
             
             // DEBUG
-            /*System.out.println(tail.getTheta());
-            System.out.print(Timer.getFPGATimestamp() );
-            System.out.print(" pos:" + thrower.position() );
-            System.out.print(" arc: " + thrower.getThrowArc() );
-            System.out.print(" sonar: " + sonar.getDistance() );
+            System.out.print("pot: " + tail.getTheta());
+            /*System.out.print(Timer.getFPGATimestamp() );
+            System.out.print(" pos:" + thrower.position() );*/
+            System.out.println(", arc: " + thrower.getThrowArc() );
+            /*System.out.print(" sonar: " + sonar.getDistance() );
             System.out.println(" status: " + thrower.getStatus() );
             */
  
@@ -108,10 +108,13 @@ public class Natasha2014 extends SimpleRobot {
     public void test() {
         Vision vision = new Vision();
         double startTime = Timer.getFPGATimestamp();
+        thrower.initThrower();
         // drive forward
         dt.setSafetyEnabled(true);
-        dt.arcadeDrive(.5,0);
-        Timer.delay(ds.getAnalogIn(1));
+        dt.arcadeDrive(-0.7,0);
+        while (Timer.getFPGATimestamp() < startTime + 2.9) {  //2.9 secs run time
+            thrower.update();
+        }
         dt.arcadeDrive(0,0);
         // Hot test
         int hotCounter = 0;
@@ -122,15 +125,24 @@ public class Natasha2014 extends SimpleRobot {
             else {
                 hotCounter --;
             }
+            thrower.update();
             Timer.delay(0.1);
         }
         //Throw test
+        thrower.setThrowSpeed(1.0);
+        thrower.setThrowArc((int)(ds.getAnalogIn(2)/5 * 130));
         if (hotCounter > 0) {
-            System.out.println("Shooting");          
-        } else {
+            System.out.println("Shooting");
+          } else {
             System.out.println("Not hot, waiting");
             Timer.delay(2);
             System.out.println("Shooting");
+        }
+        thrower.startThrow();
+        while (thrower.getStatus() != Constants.THROWER_STATUS_HOME) {
+            thrower.update();
+            System.out.println(thrower.getStatus());
+            Timer.delay(Constants.TELEOP_LOOP_DELAY_SECS);
         }
         //Turn around
     }
