@@ -25,6 +25,7 @@ public class Natasha2014 extends SimpleRobot {
     SinisterSonar sonar = new SinisterSonar();
     DriverStation ds;
     SmartDashboard DashData = new SmartDashboard();
+    Auto auto = new Auto(thrower, dt, ds);
 
     /** 
      * Robot Initialization upon boot
@@ -42,7 +43,10 @@ public class Natasha2014 extends SimpleRobot {
      * This function is called once, when Autonomous mode is enabled.
      */
     public void autonomous() {
-        
+        while (isAutonomous()) {
+            auto.updateAuto();
+            Timer.delay(Constants.TELEOP_LOOP_DELAY_SECS);
+        }
     }
 
 

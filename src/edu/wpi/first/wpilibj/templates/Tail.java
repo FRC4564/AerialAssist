@@ -20,10 +20,10 @@ public class Tail {
     private double stingerSpeed;
     private double baseSpeed;
     // potentiometer values
-    private double voltsExtended = 4.59;       // fully extended
-    private double voltsRetracted = 3.45;      // fully retracted
-    private double voltsEjectStinger = 3.35 * 1.10;   // stinger eject start 
-    private double voltsStingerStart = 3.8;    // stinger pickup start
+    private double voltsExtended = 3.44;       // fully extended
+    private double voltsRetracted = 1.94;      // fully retracted
+    private double voltsEjectStinger = voltsRetracted * 1.10;   // stinger eject start 
+    private double voltsStingerStart = voltsRetracted * 1.50;    // stinger pickup start
     // tail base motor speeds at end points and direction
     private double beginRetractSpeed = -0.8;
     private double endRetractSpeed = 0.3;
