@@ -93,12 +93,12 @@ public class Natasha2014 extends SimpleRobot {
             SmartDashboard.putNumber("Right dist",sonar.getRightDistance());
             
             // DEBUG
-            System.out.print("pot: " + tail.getTheta());
+            //System.out.print("pot: " + tail.getTheta());
             /*System.out.print(Timer.getFPGATimestamp() );
-            System.out.print(" pos:" + thrower.position() );*/
-            System.out.println(", arc: " + thrower.getThrowArc() );
+            //System.out.print(" pos:" + thrower.position() );*/
+            //System.out.println(", arc: " + thrower.getThrowArc() );
             /*System.out.print(" sonar: " + sonar.getDistance() );
-            System.out.println(" status: " + thrower.getStatus() );
+            //System.out.println(" status: " + thrower.getStatus() );
             */
  
             Timer.delay(Constants.TELEOP_LOOP_DELAY_SECS);

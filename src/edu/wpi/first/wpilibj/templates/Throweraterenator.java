@@ -21,7 +21,7 @@ public class Throweraterenator {
     private Victor motorLeft = new Victor(Constants.PWM_THROWER_LEFT);
     
     private Encoder encoder = new Encoder(Constants.DIO_THROWER_ENCODER_A, 
-            Constants.DIO_THROWER_ENCODER_B, false, EncodingType.k4X);
+            Constants.DIO_THROWER_ENCODER_B, false, EncodingType.k1X);
      
     private double motorsSpeed = 0; // Current thrower motors speed
     private double throwSpeed = 0;
