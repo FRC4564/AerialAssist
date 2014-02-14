@@ -8,6 +8,7 @@
 package edu.wpi.first.wpilibj.templates;
 
 
+import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SimpleRobot;
 import edu.wpi.first.wpilibj.Joystick;
@@ -25,6 +26,8 @@ public class Natasha2014 extends SimpleRobot {
     SinisterSonar sonar = new SinisterSonar();
     DriverStation ds;
     SmartDashboard DashData = new SmartDashboard();
+    Auto auto = new Auto(thrower, dt, ds);
+    DigitalOutput sonarEnable = new DigitalOutput(Constants.DIO_SONIC_ENABLE_LEFT);
 
     /** 
      * Robot Initialization upon boot
@@ -42,7 +45,10 @@ public class Natasha2014 extends SimpleRobot {
      * This function is called once, when Autonomous mode is enabled.
      */
     public void autonomous() {
-        
+        while (isAutonomous()) {
+            auto.updateAuto();
+            Timer.delay(Constants.TELEOP_LOOP_DELAY_SECS);
+        }
     }
 
 
@@ -88,13 +94,19 @@ public class Natasha2014 extends SimpleRobot {
             SmartDashboard.putNumber("Left dist",sonar.getLeftDistance());
             SmartDashboard.putNumber("Right dist",sonar.getRightDistance());
             
+            if (leftstick.getRawButton(11)) {
+                sonarEnable.set(false);
+            } else { 
+                sonarEnable.set(true);
+            }
+            
             // DEBUG
             //System.out.print("pot: " + tail.getTheta());
             /*System.out.print(Timer.getFPGATimestamp() );
-            System.out.print(" pos:" + thrower.position() );*/
+            //System.out.print(" pos:" + thrower.position() );*/
             //System.out.println(", arc: " + thrower.getThrowArc() );
             /*System.out.print(" sonar: " + sonar.getDistance() );
-            System.out.println(" status: " + thrower.getStatus() );
+            //System.out.println(" status: " + thrower.getStatus() );
             */
  
             Timer.delay(Constants.TELEOP_LOOP_DELAY_SECS);

@@ -7,7 +7,7 @@
 package edu.wpi.first.wpilibj.templates;
 
 import edu.wpi.first.wpilibj.AnalogChannel;
-import edu.wpi.first.wpilibj.Jaguar;
+import edu.wpi.first.wpilibj.Talon;
 
 /**
  *
@@ -20,7 +20,7 @@ public class Tail {
     private double stingerSpeed;
     private double baseSpeed;
     // potentiometer values
-    private double voltsExtended = 3.45;       // fully extended
+    private double voltsExtended = 3.44;       // fully extended
     private double voltsRetracted = 1.94;      // fully retracted
     private double voltsEjectStinger = voltsRetracted * 1.10;   // stinger eject start 
     private double voltsStingerStart = voltsRetracted * 1.50;    // stinger pickup start
@@ -30,8 +30,8 @@ public class Tail {
     private double beginExtendSpeed = 0.8;
     private double endExtendSpeed = -0.22;
      
-    Jaguar base = new Jaguar(Constants.PWM_TAIL_BASE);
-    Jaguar stinger = new Jaguar(Constants.PWM_TAIL_STINGER);
+    Talon base = new Talon(Constants.PWM_TAIL_BASE);
+    Talon stinger = new Talon(Constants.PWM_TAIL_STINGER);
     
     AnalogChannel potentiometer = new AnalogChannel(Constants.ANA_TAIL_POT);
     
