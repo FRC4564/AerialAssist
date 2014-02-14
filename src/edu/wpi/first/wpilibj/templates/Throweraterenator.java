@@ -49,7 +49,7 @@ public class Throweraterenator {
                 System.out.println("Thrower task stopped throw");
             }
             if (trace.count() > 1) {
-                trace.add(position(), getThrowArc(), getStatus());
+                //trace.add(position(), getThrowArc(), getStatus());
             } 
         }
     }
@@ -153,8 +153,8 @@ public class Throweraterenator {
     public void startThrow() {
         if (status == Constants.THROWER_STATUS_HOME) {
              status = Constants.THROWER_STATUS_THROW;
-             trace.start();
-             trace.add(position(), getThrowArc(), getStatus());
+             //trace.start();
+             //trace.add(position(), getThrowArc(), getStatus());
         }
     }
     
@@ -163,9 +163,9 @@ public class Throweraterenator {
      */
     public void update() {
         // Capture trace
-        if (trace.count() > 50) {
-            trace.print();
-        }
+        //if (trace.count() > 50) {
+        //    trace.print();
+        //}
         // Process Thrower status
         if (status == Constants.THROWER_STATUS_INIT) {
             updateInit();
