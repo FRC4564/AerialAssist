@@ -7,6 +7,10 @@
 package edu.wpi.first.wpilibj.templates;
 
 import edu.wpi.first.wpilibj.AnalogChannel;
+import edu.wpi.first.wpilibj.DigitalOutput;
+import edu.wpi.first.wpilibj.Timer;
+
+
 
 /**
  *
@@ -16,12 +20,21 @@ public class SinisterSonar {
     
     AnalogChannel sonicLeft = new AnalogChannel(Constants.ANA_SONIC_LEFT);
     AnalogChannel sonicRight = new AnalogChannel(Constants.ANA_SONIC_RIGHT);
+    DigitalOutput sonarLeftEnable = new DigitalOutput(Constants.DIO_SONIC_LEFT_ENABLE);
+    DigitalOutput sonarRightEnable = new DigitalOutput(Constants.DIO_SONIC_RIGHT_ENABLE);
+
     //constants
     private static final double VOLTS_PER_INCH = 5.0 / 1024 * 2.54; //factor for volts per inch. (see Maxbotic docs)
     private static final double variance = 1.0;   // Variance, in feet, for Balanced
     //local variables
     private int balance;  // Balance is either Equal or favored Left-side or Right-side
-
+    private double altTime = 0;
+    private int whichSonar = 1;
+    
+    public SinisterSonar () {
+        
+    }
+    
     /**
      * Returns distance in feet and sets 'balance'.
      * If out of balance, distance will be to favored side (most distant).
@@ -53,7 +66,7 @@ public class SinisterSonar {
      * Get left sonar distance in feet
      */
     public double getLeftDistance() {
-        return sonicRight.getVoltage() / VOLTS_PER_INCH / 12;
+        return sonicLeft.getVoltage() / VOLTS_PER_INCH / 12;
     }
     
     /**
@@ -88,5 +101,28 @@ public class SinisterSonar {
         
         //return balance;
     }
+    
+    public void update () {
+    //    if (altTime == 0) {
+    //        altTime = Timer.getFPGATimestamp();
+            
+            
+    //    } else {
+            if (Timer.getFPGATimestamp() - altTime >= Constants.SONIC_ALT_LOOP_DELAY){
+                altTime = Timer.getFPGATimestamp();
+                if (whichSonar == 1){                
+                    sonarLeftEnable.set(true);
+                    sonarLeftEnable.set(false);
+                    whichSonar = whichSonar * -1;
+                } else {
+                   sonarRightEnable.set(true);
+                   sonarRightEnable.set(false);
+                   whichSonar = whichSonar * -1;
+                }
+            }
+    //    }
+    }    
 }
+
+
 

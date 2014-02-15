@@ -8,10 +8,10 @@
 package edu.wpi.first.wpilibj.templates;
 
 
-import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SimpleRobot;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -27,7 +27,8 @@ public class Natasha2014 extends SimpleRobot {
     DriverStation ds;
     SmartDashboard DashData = new SmartDashboard();
     Auto auto = new Auto(thrower, dt, ds);
-    DigitalOutput sonarEnable = new DigitalOutput(Constants.DIO_SONIC_ENABLE_LEFT);
+    Solenoid leftLight = new Solenoid(1);
+    Solenoid rightLight = new Solenoid(2);
 
     /** 
      * Robot Initialization upon boot
@@ -94,12 +95,19 @@ public class Natasha2014 extends SimpleRobot {
             SmartDashboard.putNumber("Left dist",sonar.getLeftDistance());
             SmartDashboard.putNumber("Right dist",sonar.getRightDistance());
             
-            if (leftstick.getRawButton(11)) {
-                sonarEnable.set(false);
+            sonar.update();
+            if (sonar.getBalance() == Constants.SONIC_BALANCE_LEFT
+                || sonar.getBalance() == Constants.SONIC_BALANCE_EQUAL) {
+                leftLight.set(true);
             } else { 
-                sonarEnable.set(true);
+                leftLight.set(false);
             }
-            
+            if (sonar.getBalance() == Constants.SONIC_BALANCE_RIGHT
+                || sonar.getBalance() == Constants.SONIC_BALANCE_EQUAL) {
+                rightLight.set(true);
+            } else { 
+                rightLight.set(false);
+            }
             // DEBUG
             //System.out.print("pot: " + tail.getTheta());
             /*System.out.print(Timer.getFPGATimestamp() );
@@ -108,6 +116,10 @@ public class Natasha2014 extends SimpleRobot {
             /*System.out.print(" sonar: " + sonar.getDistance() );
             //System.out.println(" status: " + thrower.getStatus() );
             */
+            System.out.print("L: " + sonar.getLeftDistance());
+            System.out.print(", R: " + sonar.getRightDistance());
+            System.out.print(", Dist: " + sonar.getDistance());
+            System.out.println(", Bal: " + sonar.getBalance());
  
             Timer.delay(Constants.TELEOP_LOOP_DELAY_SECS);
         }        
@@ -118,7 +130,34 @@ public class Natasha2014 extends SimpleRobot {
      * This function is called once each time the robot enters test mode.
      */
     public void test() {
-        Vision vision = new Vision();
+        Solenoid left = new Solenoid(1);
+        Solenoid right = new Solenoid(2);
+        Solenoid comm = new Solenoid(3);
+        while (isEnabled()) {
+            sonar.sonarLeftEnable.set(true);
+            sonar.sonarRightEnable.set(true);
+            System.out.print("L: " + sonar.getLeftDistance());
+            System.out.print(", R: " + sonar.getRightDistance());
+            System.out.print(", Dist: " + sonar.getDistance());
+            System.out.println(", Bal: " + sonar.getBalance());
+            
+            if (sonar.getBalance() == Constants.SONIC_BALANCE_LEFT
+                || sonar.getBalance() == Constants.SONIC_BALANCE_EQUAL) {
+                left.set(true);
+            } else { 
+                left.set(false);
+            }
+            if (sonar.getBalance() == Constants.SONIC_BALANCE_RIGHT
+                || sonar.getBalance() == Constants.SONIC_BALANCE_EQUAL) {
+                right.set(true);
+            } else { 
+                right.set(false);
+            }
+            
+            Timer.delay(.1);
+        }
+        
+        /*Vision vision = new Vision();
         double startTime = Timer.getFPGATimestamp();
         thrower.initThrower();
         // drive forward
@@ -156,6 +195,7 @@ public class Natasha2014 extends SimpleRobot {
             //System.out.println(thrower.getStatus());
             Timer.delay(Constants.TELEOP_LOOP_DELAY_SECS);
         }
-        //Turn around
+        //Turn around*/
+        
     }
 }

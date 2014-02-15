@@ -28,6 +28,8 @@ public class Constants {
     // DIOs
     public static final int DIO_THROWER_ENCODER_A = 1;
     public static final int DIO_THROWER_ENCODER_B = 2;
+    public static final int DIO_SONIC_LEFT_ENABLE = 3;
+    public static final int DIO_SONIC_RIGHT_ENABLE = 4;
     
     // Analog Inputs
     public static final int ANA_SONIC_RIGHT = 1;
@@ -66,11 +68,14 @@ public class Constants {
     public static final int THROWER_STATUS_THROW = 1;
     public static final int THROWER_STATUS_STOW = 2;
     public static final int THROWER_STATUS_INIT = 3;
+    public static final int THROWER_STATUS_BREAK = 4;
+    public static final double THROWER_BREAK_TIME = 5;
 
     //Sonic constants
     public static final int SONIC_BALANCE_EQUAL = 0;
     public static final int SONIC_BALANCE_RIGHT = 1;
     public static final int SONIC_BALANCE_LEFT = 2;
+    public static final double SONIC_ALT_LOOP_DELAY = .2;
 
     //Scorpion Tail
     public static final int TAIL_STATUS_INIT = 0;
