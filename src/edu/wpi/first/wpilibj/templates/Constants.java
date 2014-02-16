@@ -79,7 +79,7 @@ public class Constants {
     public static final int SONIC_BALANCE_EQUAL = 0;
     public static final int SONIC_BALANCE_RIGHT = 1;
     public static final int SONIC_BALANCE_LEFT = 2;
-    public static final double SONIC_ALT_LOOP_DELAY = .2;  /delay time between sonar pings
+    public static final double SONIC_ALT_LOOP_DELAY = .2;  //delay time between sonar pings
 
     //Scorpion Tail
     public static final int TAIL_STATUS_INIT = 0;
