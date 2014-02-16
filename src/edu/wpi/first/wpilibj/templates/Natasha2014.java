@@ -38,7 +38,7 @@ public class Natasha2014 extends SimpleRobot {
         ds = DriverStation.getInstance();
         dt.setMotorsInverted();
 
-        thrower.setStowSpeed(-0.32);
+        thrower.setStowSpeed(-0.35);
         thrower.initThrower();
     }
 
@@ -68,41 +68,57 @@ public class Natasha2014 extends SimpleRobot {
             //thrower.setThrowSpeed(ds.getAnalogIn(1)/5);
             //thrower.setThrowArc((int)(ds.getAnalogIn(2)/5 * 160));
             thrower.setTargetDistance(sonar.getDistance());
-            // manual encoder reset
-            if (leftstick.getRawButton(Constants.JB_THROWER_ENCODER_RESET)) {
-                thrower.resetEncoder();
-            }
-            // A throw requires two JB buttons and the tail to be retracted.
-            if (leftstick.getRawButton(Constants.JB_INIT_THROW_1) &&
-                  leftstick.getRawButton(Constants.JB_INIT_THROW_2) &&
-                  tail.getStatus() == Constants.TAIL_STATUS_RETRACTED) {
-                thrower.setTargetDistance(sonar.getDistance());
-                thrower.startThrow();
+            // A throw tail be home and Throw Safety button be pressed.
+            if (tail.getStatus() == Constants.TAIL_STATUS_RETRACTED &&
+                rightstick.getRawButton(Constants.JB_THROW_SAFETY) ) {
+                // Auto ranged throw
+                if (rightstick.getRawButton(Constants.JB_THROW_AUTO_DIST) ) {
+                    thrower.startThrow();
+                // Truss toss
+                } else if (rightstick.getRawButton(Constants.JB_THROW_TRUSS_TOSS) ){
+                    thrower.setThrowSpeed(1);
+                    thrower.setThrowArc(90);
+                    thrower.startThrow();
+                // Robot pass
+                } else if (rightstick.getRawButton(Constants.JB_THROW_ROBOT_PASS) || 
+                           rightstick.getRawButton(Constants.JB_THROW_ROBOT_PASS_ALT) ) {
+                    thrower.setThrowSpeed(0.6);
+                    thrower.setThrowArc(90);
+                    thrower.startThrow();
+                // Manual throw - no sonar
+                } else if (rightstick.getRawButton(Constants.JB_THROW_TRUSS_TOSS) ){
+                    thrower.setThrowSpeed(0.6);
+                    thrower.setThrowArc(90);
+                    thrower.startThrow();
+                // Manual throw - no sonar
+                } else if (rightstick.getRawButton(Constants.JB_THROW_TRUSS_TOSS) ){
+                    thrower.setThrowSpeed(1.0);
+                    thrower.setThrowArc(125);
+                    thrower.startThrow();
+                // Use Analog parameters
+                } else if (rightstick.getRawButton(Constants.JB_THROW_ANALOG) ){
+                   thrower.setThrowSpeed(ds.getAnalogIn(1)/5);
+                   thrower.setThrowArc((int)(ds.getAnalogIn(2)/5 * 160));
+                   thrower.startThrow();
+                }    
             }
             thrower.update();
                       
             // SCORPION TAIL
-            if (thrower.getStatus() == Constants.THROWER_STATUS_HOME) {
+            if (thrower.getStatus() == Constants.THROWER_STATUS_HOME) {  
                 if (leftstick.getRawButton(Constants.JB_TAIL_EXTEND) ) {
-                    tail.startExtend();
+                    tail.startEject();
                 }
                 if (leftstick.getRawButton(Constants.JB_TAIL_RETRACT) ) {
                     tail.startRetract();
-                }
-                if (leftstick.getRawButton(Constants.JB_TAIL_EJECT) ) {
-                    tail.startEject();
                 }
             }
             tail.update();
 
             // SONAR
-            SmartDashboard.putNumber("Left dist",sonar.getLeftDistance());
-            SmartDashboard.putNumber("Right dist",sonar.getRightDistance());
-            SmartDashboard.putNumber("Thrower Status",thrower.getStatus());
-            SmartDashboard.putNumber("Target Arc", thrower.getThrowArc());
-            
-            sonar.update();
-            // lights
+             sonar.update();
+             
+            // LIGHTS
             if (thrower.inRange() ) {
                 if (sonar.getBalance() == Constants.SONIC_BALANCE_LEFT
                     || sonar.getBalance() == Constants.SONIC_BALANCE_EQUAL) {
@@ -124,6 +140,11 @@ public class Natasha2014 extends SimpleRobot {
             // DEBUG
             //System.out.print("pot: " + tail.getTheta());
             //System.out.print(Timer.getFPGATimestamp() );
+            SmartDashboard.putNumber("Left dist",sonar.getLeftDistance());
+            SmartDashboard.putNumber("Right dist",sonar.getRightDistance());
+            SmartDashboard.putNumber("Thrower Status",thrower.getStatus());
+            SmartDashboard.putNumber("Target Arc", thrower.getThrowArc());
+            
             System.out.println(" pos:" + thrower.position() );
             //System.out.println(", arc: " + thrower.getThrowArc() );
             /*System.out.print(" sonar: " + sonar.getDistance() );
