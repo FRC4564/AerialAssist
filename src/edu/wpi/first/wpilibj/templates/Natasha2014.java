@@ -38,7 +38,7 @@ public class Natasha2014 extends SimpleRobot {
         ds = DriverStation.getInstance();
         dt.setMotorsInverted();
 
-        thrower.setStowSpeed(-0.3);
+        thrower.setStowSpeed(-0.4);
         thrower.initThrower();
     }
 
@@ -46,7 +46,7 @@ public class Natasha2014 extends SimpleRobot {
      * This function is called once, when Autonomous mode is enabled.
      */
     public void autonomous() {
-        while (isAutonomous()) {
+        while (auto.status != Constants.AUTO_STATUS_DONE) {
             auto.updateAuto();
             Timer.delay(Constants.TELEOP_LOOP_DELAY_SECS);
         }
@@ -66,7 +66,7 @@ public class Natasha2014 extends SimpleRobot {
             
             // THROWER
             thrower.setThrowSpeed(ds.getAnalogIn(1)/5);
-            thrower.setThrowArc((int)(ds.getAnalogIn(2)/5 * 130));
+            thrower.setThrowArc((int)(ds.getAnalogIn(2)/5 * 160));
             // manual encoder reset
             if (leftstick.getRawButton(Constants.JB_THROWER_ENCODER_RESET)) {
                 thrower.resetEncoder();
@@ -94,6 +94,7 @@ public class Natasha2014 extends SimpleRobot {
             // SONAR
             SmartDashboard.putNumber("Left dist",sonar.getLeftDistance());
             SmartDashboard.putNumber("Right dist",sonar.getRightDistance());
+            SmartDashboard.putNumber("Thrower Status",thrower.getStatus());
             
             sonar.update();
             if (sonar.getBalance() == Constants.SONIC_BALANCE_LEFT
@@ -110,16 +111,16 @@ public class Natasha2014 extends SimpleRobot {
             }
             // DEBUG
             //System.out.print("pot: " + tail.getTheta());
-            /*System.out.print(Timer.getFPGATimestamp() );
-            //System.out.print(" pos:" + thrower.position() );*/
+            //System.out.print(Timer.getFPGATimestamp() );
+            System.out.println(" pos:" + thrower.position() );
             //System.out.println(", arc: " + thrower.getThrowArc() );
             /*System.out.print(" sonar: " + sonar.getDistance() );
             //System.out.println(" status: " + thrower.getStatus() );
-            */
+            
             System.out.print("L: " + sonar.getLeftDistance());
             System.out.print(", R: " + sonar.getRightDistance());
             System.out.print(", Dist: " + sonar.getDistance());
-            System.out.println(", Bal: " + sonar.getBalance());
+            System.out.println(", Bal: " + sonar.getBalance());*/
  
             Timer.delay(Constants.TELEOP_LOOP_DELAY_SECS);
         }        

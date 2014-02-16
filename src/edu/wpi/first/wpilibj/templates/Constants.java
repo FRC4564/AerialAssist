@@ -57,7 +57,7 @@ public class Constants {
  
     
     // Miscellaneous
-    public static final double TELEOP_LOOP_DELAY_SECS = .01;
+    public static final double TELEOP_LOOP_DELAY_SECS = .05;
 
     
     // Thrower parameters
@@ -68,8 +68,8 @@ public class Constants {
     public static final int THROWER_STATUS_THROW = 1;
     public static final int THROWER_STATUS_STOW = 2;
     public static final int THROWER_STATUS_INIT = 3;
-    public static final int THROWER_STATUS_BREAK = 4;
-    public static final double THROWER_BREAK_TIME = 5;
+    public static final int THROWER_STATUS_BRAKE = 4;
+    public static final double THROWER_BRAKE_TIME = 5;
 
     //Sonic constants
     public static final int SONIC_BALANCE_EQUAL = 0;
@@ -90,4 +90,5 @@ public class Constants {
     public static final int AUTO_STATUS_MOVING = 1;
     public static final int AUTO_STATUS_LOOKING = 2;
     public static final int AUTO_STATUS_THROW = 3;
+    public static final int AUTO_STATUS_DONE = 4;
 }

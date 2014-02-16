@@ -28,7 +28,7 @@ public class Throweraterenator {
     private double stowSpeed = 0;
     private int status = 0;
     private int arc = 0;
-    private double breakTime = 0;
+    private double brakeTime = 0;
     
     // Initialization variables
     private double initTime = 0;
@@ -46,7 +46,7 @@ public class Throweraterenator {
         public void run() {
             if (status == Constants.THROWER_STATUS_THROW && encoder.get() >= arc) {
                 setMotors(stowSpeed);
-                status = Constants.THROWER_STATUS_BREAK;
+                status = Constants.THROWER_STATUS_BRAKE;
                 System.out.println("Thrower task stopped throw");
             }
             if (trace.count() > 1) {
@@ -144,7 +144,7 @@ public class Throweraterenator {
         status = Constants.THROWER_STATUS_INIT;
         //Schedule timer task to stop thrower when target pos is reached       
         timer = new java.util.Timer();    
-        timer.schedule(new stopThrowerTask(), 0, 2);  // set to run every 2ms  
+        timer.schedule(new stopThrowerTask(), 0, 1);  // set to run every 1ms  
     }
     
     /** Initiate a throw at currently set speed and arc.
@@ -172,9 +172,9 @@ public class Throweraterenator {
             updateInit();
         } else if (status == Constants.THROWER_STATUS_THROW) {
             updateThrow();
-        } else if (status == Constants.THROWER_STATUS_BREAK) {
-            updateBreak();
-        } else if (position() != 0) {
+        } else if (status == Constants.THROWER_STATUS_BRAKE) {
+            updatebrake();
+        } else {
             updateStow();
         }
 
@@ -215,16 +215,16 @@ public class Throweraterenator {
     }
     
     /**
-    * Stops the thrower at its peak for the value of THROWER_BREAK_TIME
+    * Stops the thrower at its peak for the value of THROWER_brake_TIME
     */
-    public void updateBreak() {
-        if (breakTime == 0) {
-            breakTime = Timer.getFPGATimestamp();
-        } else if (Timer.getFPGATimestamp() - breakTime <= Constants.THROWER_BREAK_TIME) {
+    public void updatebrake() {
+        if (brakeTime == 0) {
+            brakeTime = Timer.getFPGATimestamp();
+        } else if (Timer.getFPGATimestamp() - brakeTime <= Constants.THROWER_BRAKE_TIME) {
             setMotors(-0.1);
         } else { 
             status = Constants.THROWER_STATUS_STOW;
-            breakTime = 0;
+            brakeTime = 0;
         }
     }
     
@@ -233,11 +233,12 @@ public class Throweraterenator {
      * The timerTask is also watching for target arc, and stopping throw.
      */
     private void updateThrow() {
+        System.out.println("Throwing: " + position());
         if (position() < arc) {
             setMotors(throwSpeed);
         } else {
             setMotors(0);
-            status = Constants.THROWER_STATUS_BREAK;
+            status = Constants.THROWER_STATUS_BRAKE;
         }
     }
     
@@ -246,10 +247,10 @@ public class Throweraterenator {
      * Return thrower to home position.  
      */ 
     private void updateStow() {
-        if (position() > 10) {
+        if (position() > 50) {
             setMotors(stowSpeed);
         } else if (position() > 1) {
-            setMotors(stowSpeed / 2);
+            setMotors(-0.1);
         } else if (position() < -1) {
             setMotors(-stowSpeed / 2);
         } else {

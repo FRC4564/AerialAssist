@@ -20,10 +20,9 @@ public class Auto {
     double startTime;
     Vision vision = new Vision();
     private int hotCounter = 0;
-    private int status = Constants.AUTO_STATUS_INIT;
+    int status = Constants.AUTO_STATUS_INIT;
     
     public Auto(Throweraterenator thrower, DriveTrain dt, DriverStation ds) {
-        startTime = Timer.getFPGATimestamp();
         thrower = this.thrower;
         dt = this.dt;
         ds = this.ds;
@@ -32,7 +31,7 @@ public class Auto {
     public int checkStatus() {
         if (Timer.getFPGATimestamp() < startTime + 2.9) {
             return Constants.AUTO_STATUS_MOVING;
-        } else if (Timer.getFPGATimestamp()< startTime + 4) {
+        } else if (Timer.getFPGATimestamp() < startTime + 4) {
             return Constants.AUTO_STATUS_LOOKING;
         } else {
             return Constants.AUTO_STATUS_THROW;
@@ -45,7 +44,7 @@ public class Auto {
         thrower.setThrowArc((int)(ds.getAnalogIn(2)/5 * 130));
         if (hotCounter > 0) {
             System.out.println("Shooting");
-          } else {
+        } else {
             System.out.println("Not hot, waiting");
             Timer.delay(2);
             System.out.println("Shooting");
@@ -54,30 +53,38 @@ public class Auto {
         if (thrower.getStatus() != Constants.THROWER_STATUS_HOME) {
             thrower.update();
             System.out.println(thrower.getStatus());
-            Timer.delay(Constants.TELEOP_LOOP_DELAY_SECS);
             }
+        status = Constants.AUTO_STATUS_DONE;
     }
     
     public void updateAuto() {
         if (status == Constants.AUTO_STATUS_INIT) {
+            startTime = Timer.getFPGATimestamp();
             thrower.initThrower();
             status = Constants.AUTO_STATUS_MOVING;
-        } else if (checkStatus() == Constants.AUTO_STATUS_MOVING) {
-            thrower.update();
+        } else if (status == Constants.AUTO_STATUS_MOVING) {
             dt.setSafetyEnabled(true);
-            dt.arcadeDrive(-0.7, 0);
+            if (Timer.getFPGATimestamp() < startTime + 2.9) {
+                dt.arcadeDrive(-0.7, 0);
+            } else {
+                status = Constants.AUTO_STATUS_LOOKING;
+            }
         } else if (checkStatus() == Constants.AUTO_STATUS_LOOKING) {
             dt.arcadeDrive(0, 0);
-            if (vision.hot()) {
-                hotCounter ++;
+            if (Timer.getFPGATimestamp() < startTime + 4) {
+                if (vision.hot()) {
+                    hotCounter ++;
+                }
+                else {
+                    hotCounter --;
+                }
+            } else {
+                status = Constants.AUTO_STATUS_THROW;
             }
-            else {
-                hotCounter --;
-            }
-            thrower.update();
         } else if (checkStatus() == Constants.AUTO_STATUS_THROW) {
             autoThrow();
         }
+        thrower.update();
     }
     
 }
