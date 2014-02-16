@@ -47,17 +47,21 @@ public class Constants {
 
     
     // Joysticks
-    public static final int JB_DRIVE_SLOW = 1;
-    public static final int JB_THROWER_ENCODER_RESET = 2;
-    public static final int JB_INIT_THROW_1 = 7;
-    public static final int JB_INIT_THROW_2 = 10;
-    public static final int JB_TAIL_EXTEND = 4;
-    public static final int JB_TAIL_RETRACT = 5;
-    public static final int JB_TAIL_EJECT = 1;
+    // rightstick
+    public static final int JB_THROW_SAFETY = 1;          //Throw enable
+    public static final int JB_THROW_AUTO_DIST = 2;       //Throw based on sonar
+    public static final int JB_THROW_TRUSS_TOSS = 3;      //Throw a truss toss
+    public static final int JB_THROW_ROBOT_PASS = 4;      //Lob to another robot
+    public static final int JB_THROW_MANUAL = 5           //Throw static params, no sonar
+    public static final int JB_THROW_ANALOG = 7           //Throw using analog inputs
+    // leftstick
+    public static final int JB_TAIL_EXTEND = 1;           //Extend tail-eject ball
+    public static final int JB_TAIL_RETRACT = 2;          //Retract tail-pickup ball
+    //public static final int JB_TAIL_EJECT = 1;
  
     
     // Miscellaneous
-    public static final double TELEOP_LOOP_DELAY_SECS = .05;
+    public static final double TELEOP_LOOP_DELAY_SECS = .05;  //Main loop speed (.05 = 20hz)
 
     
     // Thrower parameters
@@ -75,7 +79,7 @@ public class Constants {
     public static final int SONIC_BALANCE_EQUAL = 0;
     public static final int SONIC_BALANCE_RIGHT = 1;
     public static final int SONIC_BALANCE_LEFT = 2;
-    public static final double SONIC_ALT_LOOP_DELAY = .2;
+    public static final double SONIC_ALT_LOOP_DELAY = .2;  /delay time between sonar pings
 
     //Scorpion Tail
     public static final int TAIL_STATUS_INIT = 0;
