@@ -29,6 +29,7 @@ public class Throweraterenator {
     private int status = 0;
     private int arc = 0;
     private double brakeTime = 0;
+    private boolean inRange = false; //True if target distance is in shooting range
     
     // Initialization variables
     private double initTime = 0;
@@ -119,6 +120,9 @@ public class Throweraterenator {
         return status;
     }
         
+    public boolean getInRange() {
+        return inRange;
+    }
     /**
      *  Current arm position based on encoder.
      * @return Encoder count
@@ -261,8 +265,8 @@ public class Throweraterenator {
 
 
     
-    private boolean inRange(){
-        return true;
+    public boolean inRange(){
+        return inRange;
     }
     
     /** Sets speed and arc parameters given target distance in feet.
@@ -272,7 +276,7 @@ public class Throweraterenator {
      * @param distance decimal feet to target
      * @return true if distance is within thrower range
      */
-    public boolean setTargetDistance(double distance) {
+    public void setTargetDistance(double distance) {
         int arcCount = 0;
         if (distance >=1.5 && distance <= 8.0) {  //Valid throwing range
             if (distance <= 3.0) {  //for ranges 1.5 to 3.0 interpolate
@@ -283,9 +287,9 @@ public class Throweraterenator {
             }
             setThrowSpeed(1.0);
             setThrowArc(arcCount);
-            return true;
+            inRange =  true;
         } else {
-            return false;
+            inRange = false;
         }
     }
 }

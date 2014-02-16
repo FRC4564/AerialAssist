@@ -67,6 +67,7 @@ public class Natasha2014 extends SimpleRobot {
             // THROWER
             //thrower.setThrowSpeed(ds.getAnalogIn(1)/5);
             //thrower.setThrowArc((int)(ds.getAnalogIn(2)/5 * 160));
+            thrower.setTargetDistance(sonar.getDistance());
             // manual encoder reset
             if (leftstick.getRawButton(Constants.JB_THROWER_ENCODER_RESET)) {
                 thrower.resetEncoder();
@@ -101,18 +102,25 @@ public class Natasha2014 extends SimpleRobot {
             SmartDashboard.putNumber("Target Arc", thrower.getThrowArc());
             
             sonar.update();
-            if (sonar.getBalance() == Constants.SONIC_BALANCE_LEFT
-                || sonar.getBalance() == Constants.SONIC_BALANCE_EQUAL) {
-                leftLight.set(true);
-            } else { 
+            // lights
+            if (thrower.inRange() ) {
+                if (sonar.getBalance() == Constants.SONIC_BALANCE_LEFT
+                    || sonar.getBalance() == Constants.SONIC_BALANCE_EQUAL) {
+                    leftLight.set(true);
+                } else { 
+                    leftLight.set(false);
+                }
+                if (sonar.getBalance() == Constants.SONIC_BALANCE_RIGHT
+                    || sonar.getBalance() == Constants.SONIC_BALANCE_EQUAL) {
+                    rightLight.set(true);
+                } else { 
+                    rightLight.set(false);
+                }
+            } else {
+                rightLight.set(false);
                 leftLight.set(false);
             }
-            if (sonar.getBalance() == Constants.SONIC_BALANCE_RIGHT
-                || sonar.getBalance() == Constants.SONIC_BALANCE_EQUAL) {
-                rightLight.set(true);
-            } else { 
-                rightLight.set(false);
-            }
+                
             // DEBUG
             //System.out.print("pot: " + tail.getTheta());
             //System.out.print(Timer.getFPGATimestamp() );
