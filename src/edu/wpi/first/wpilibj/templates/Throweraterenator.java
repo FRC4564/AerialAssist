@@ -250,7 +250,7 @@ public class Throweraterenator {
         if (position() > 50) {
             setMotors(stowSpeed);
         } else if (position() > 1) {
-            setMotors(-0.1);
+            setMotors(-0.15);
         } else if (position() < -1) {
             setMotors(-stowSpeed / 2);
         } else {
@@ -273,6 +273,19 @@ public class Throweraterenator {
      * @return true if distance is within thrower range
      */
     public boolean setTargetDistance(double distance) {
-        return false;
+        int arcCount = 0;
+        if (distance >=1.5 && distance <= 8.0) {  //Valid throwing range
+            if (distance <= 3.0) {  //for ranges 1.5 to 3.0 interpolate
+                double slope = (118 - 86) / (3.0 - 1.5);
+                arcCount = (int)(slope * distance + 88);     
+            } else {
+                arcCount = 125;
+            }
+            setThrowSpeed(1.0);
+            setThrowArc(arcCount);
+            return true;
+        } else {
+            return false;
+        }
     }
 }

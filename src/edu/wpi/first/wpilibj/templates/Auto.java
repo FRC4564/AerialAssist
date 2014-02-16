@@ -27,64 +27,57 @@ public class Auto {
         dt = this.dt;
         ds = this.ds;
     }
-    
-    public int checkStatus() {
-        if (Timer.getFPGATimestamp() < startTime + 2.9) {
-            return Constants.AUTO_STATUS_MOVING;
-        } else if (Timer.getFPGATimestamp() < startTime + 4) {
-            return Constants.AUTO_STATUS_LOOKING;
-        } else {
-            return Constants.AUTO_STATUS_THROW;
-            
-        }
-    }
-    
-    public void autoThrow() {
-        thrower.setThrowSpeed(1.0);
-        thrower.setThrowArc((int)(ds.getAnalogIn(2)/5 * 130));
-        if (hotCounter > 0) {
-            System.out.println("Shooting");
-        } else {
-            System.out.println("Not hot, waiting");
-            Timer.delay(2);
-            System.out.println("Shooting");
-        }
-        thrower.startThrow();
-        if (thrower.getStatus() != Constants.THROWER_STATUS_HOME) {
-            thrower.update();
-            System.out.println(thrower.getStatus());
-            }
-        status = Constants.AUTO_STATUS_DONE;
-    }
-    
+        
     public void updateAuto() {
         if (status == Constants.AUTO_STATUS_INIT) {
             startTime = Timer.getFPGATimestamp();
             thrower.initThrower();
+            thrower.setThrowSpeed(1.0);
+            thrower.setThrowArc(125);
             status = Constants.AUTO_STATUS_MOVING;
+        // Moving
         } else if (status == Constants.AUTO_STATUS_MOVING) {
             dt.setSafetyEnabled(true);
             if (Timer.getFPGATimestamp() < startTime + 2.9) {
                 dt.arcadeDrive(-0.7, 0);
             } else {
+                dt.arcadeDrive(0, 0);
                 status = Constants.AUTO_STATUS_LOOKING;
             }
-        } else if (checkStatus() == Constants.AUTO_STATUS_LOOKING) {
-            dt.arcadeDrive(0, 0);
+        // Looking for Hot or Cold
+        } else if (status == Constants.AUTO_STATUS_LOOKING) {
             if (Timer.getFPGATimestamp() < startTime + 4) {
                 if (vision.hot()) {
                     hotCounter ++;
-                }
-                else {
+                } else {
                     hotCounter --;
                 }
             } else {
+                status = Constants.AUTO_STATUS_THROWCHECK;
+            }
+        // Test to see if it is time to throw or wait
+        } else if (status == Constants.AUTO_STATUS_THROWCHECK) {
+            if (hotCounter > 0) {
+                System.out.println("Shooting");
+                status = Constants.AUTO_STATUS_THROW;
+            } else if (Timer.getFPGATimestamp() < startTime + 6) {
+                System.out.println("Shooting");
                 status = Constants.AUTO_STATUS_THROW;
             }
-        } else if (checkStatus() == Constants.AUTO_STATUS_THROW) {
-            autoThrow();
+        // Initiate throw
+        } else if (status == Constants.AUTO_STATUS_THROW) {
+            thrower.startThrow();
+            status = Constants.AUTO_STATUS_THROWING;
+        // Allow throw to complete
+        } else if (status == Constants.AUTO_STATUS_THROWING) {
+            if (thrower.getStatus() == Constants.THROWER_STATUS_HOME) {
+                status = Constants.AUTO_STATUS_DONE;
+            }
         }
+        // Thrower must be updated every loop
         thrower.update();
     }
     
 }
+
+

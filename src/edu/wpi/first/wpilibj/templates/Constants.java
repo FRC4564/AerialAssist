@@ -89,6 +89,8 @@ public class Constants {
     public static final int AUTO_STATUS_INIT = 0;
     public static final int AUTO_STATUS_MOVING = 1;
     public static final int AUTO_STATUS_LOOKING = 2;
-    public static final int AUTO_STATUS_THROW = 3;
-    public static final int AUTO_STATUS_DONE = 4;
+    public static final int AUTO_STATUS_THROWCHECK = 3;
+    public static final int AUTO_STATUS_THROW = 4;
+    public static final int AUTO_STATUS_THROWING = 5;
+    public static final int AUTO_STATUS_DONE = 6;
 }

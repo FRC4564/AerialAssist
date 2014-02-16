@@ -38,7 +38,7 @@ public class Natasha2014 extends SimpleRobot {
         ds = DriverStation.getInstance();
         dt.setMotorsInverted();
 
-        thrower.setStowSpeed(-0.4);
+        thrower.setStowSpeed(-0.32);
         thrower.initThrower();
     }
 
@@ -65,8 +65,8 @@ public class Natasha2014 extends SimpleRobot {
             dt.arcadeDrive(leftstick.getY() * -1, leftstick.getX() * .7);
             
             // THROWER
-            thrower.setThrowSpeed(ds.getAnalogIn(1)/5);
-            thrower.setThrowArc((int)(ds.getAnalogIn(2)/5 * 160));
+            //thrower.setThrowSpeed(ds.getAnalogIn(1)/5);
+            //thrower.setThrowArc((int)(ds.getAnalogIn(2)/5 * 160));
             // manual encoder reset
             if (leftstick.getRawButton(Constants.JB_THROWER_ENCODER_RESET)) {
                 thrower.resetEncoder();
@@ -75,19 +75,22 @@ public class Natasha2014 extends SimpleRobot {
             if (leftstick.getRawButton(Constants.JB_INIT_THROW_1) &&
                   leftstick.getRawButton(Constants.JB_INIT_THROW_2) &&
                   tail.getStatus() == Constants.TAIL_STATUS_RETRACTED) {
+                thrower.setTargetDistance(sonar.getDistance());
                 thrower.startThrow();
             }
             thrower.update();
                       
             // SCORPION TAIL
-            if (leftstick.getRawButton(Constants.JB_TAIL_EXTEND)) {
-                tail.startExtend();
-            }
-            if (leftstick.getRawButton(Constants.JB_TAIL_RETRACT)) {
-                tail.startRetract();
-            }
-            if (leftstick.getRawButton(Constants.JB_TAIL_EJECT)) {
-                tail.startEject();
+            if (thrower.getStatus() == Constants.THROWER_STATUS_HOME) {
+                if (leftstick.getRawButton(Constants.JB_TAIL_EXTEND) ) {
+                    tail.startExtend();
+                }
+                if (leftstick.getRawButton(Constants.JB_TAIL_RETRACT) ) {
+                    tail.startRetract();
+                }
+                if (leftstick.getRawButton(Constants.JB_TAIL_EJECT) ) {
+                    tail.startEject();
+                }
             }
             tail.update();
 
@@ -95,6 +98,7 @@ public class Natasha2014 extends SimpleRobot {
             SmartDashboard.putNumber("Left dist",sonar.getLeftDistance());
             SmartDashboard.putNumber("Right dist",sonar.getRightDistance());
             SmartDashboard.putNumber("Thrower Status",thrower.getStatus());
+            SmartDashboard.putNumber("Target Arc", thrower.getThrowArc());
             
             sonar.update();
             if (sonar.getBalance() == Constants.SONIC_BALANCE_LEFT
