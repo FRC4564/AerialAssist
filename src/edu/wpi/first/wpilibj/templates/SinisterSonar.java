@@ -59,7 +59,7 @@ public class SinisterSonar {
             distance = distanceRight;
             balance = Constants.SONIC_BALANCE_RIGHT;
         } 
-        return distance / 12.0;  //conversion to feet from inches
+        return distance;  //conversion to feet from inches
     }
     
     /**

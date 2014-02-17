@@ -274,19 +274,24 @@ public class Throweraterenator {
      *  no changes will be made and 'false' will be returned.
      * 
      * @param distance decimal feet to target
-     * @return true if distance is within thrower range
      */
     public void setTargetDistance(double distance) {
-        int arcCount = 0;
-        if (distance >=1.5 && distance <= 8.0) {  //Valid throwing range
-            if (distance <= 3.0) {  //for ranges 1.5 to 3.0 interpolate
-                double slope = (118 - 86) / (3.0 - 1.5);
-                arcCount = (int)(slope * distance + 88);     
+        double distMin = 1.5;
+        double distMax = 8.0;
+        double distInterpolate = 4.0;  // distances below this are interpolated
+        int arcMin = 86;
+        int arcMax = 125;
+        int arcCalc = 0;
+        
+        if (distance >=distMin && distance <= distMax) {  //Valid throwing range
+            if (distance <= distInterpolate) {  
+                double proportion = (distance - distMin) / (distInterpolate - distMin);
+                arcCalc = (int)((arcMax - arcMin) * proportion + arcMin);
             } else {
-                arcCount = 125;
+                arcCalc = arcMax;
             }
             setThrowSpeed(1.0);
-            setThrowArc(arcCount);
+            setThrowArc(arcCalc);
             inRange =  true;
         } else {
             inRange = false;

@@ -21,15 +21,18 @@ public class Auto {
     Vision vision = new Vision();
     private int hotCounter = 0;
     int status = Constants.AUTO_STATUS_INIT;
+    double driveSpeed = 0;
     
     public Auto(Throweraterenator thrower, DriveTrain dt, DriverStation ds) {
-        thrower = this.thrower;
-        dt = this.dt;
-        ds = this.ds;
+        this.thrower = thrower;
+        this.dt = dt;
+        this.ds = ds;
     }
         
     public void updateAuto() {
         if (status == Constants.AUTO_STATUS_INIT) {
+            System.out.println("INIT Autonomous");
+            dt.setSafetyEnabled(false);
             startTime = Timer.getFPGATimestamp();
             thrower.initThrower();
             thrower.setThrowSpeed(1.0);
@@ -37,15 +40,16 @@ public class Auto {
             status = Constants.AUTO_STATUS_MOVING;
         // Moving
         } else if (status == Constants.AUTO_STATUS_MOVING) {
-            dt.setSafetyEnabled(true);
+            System.out.println("Moving");
             if (Timer.getFPGATimestamp() < startTime + 2.9) {
-                dt.arcadeDrive(-0.7, 0);
+               driveSpeed = -0.7;
             } else {
-                dt.arcadeDrive(0, 0);
+               driveSpeed = 0.0;
                 status = Constants.AUTO_STATUS_LOOKING;
             }
         // Looking for Hot or Cold
         } else if (status == Constants.AUTO_STATUS_LOOKING) {
+            System.out.println("Looking");
             if (Timer.getFPGATimestamp() < startTime + 4) {
                 if (vision.hot()) {
                     hotCounter ++;
@@ -76,6 +80,7 @@ public class Auto {
         }
         // Thrower must be updated every loop
         thrower.update();
+        dt.arcadeDrive(driveSpeed, 0);
     }
     
 }

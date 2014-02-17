@@ -20,13 +20,13 @@ public class Tail {
     private double stingerSpeed;
     private double baseSpeed;
     // potentiometer values
-    private double voltsExtended = 3.44;       // fully extended
-    private double voltsRetracted = 1.94;      // fully retracted
+    private double voltsExtended = 3.43;       // fully extended
+    private double voltsRetracted = 1.96;      // fully retracted
     private double voltsEjectStinger = voltsRetracted * 1.10;   // stinger eject start 
     private double voltsStingerStart = voltsRetracted * 1.50;    // stinger pickup start
     // tail base motor speeds at end points and direction
-    private double beginRetractSpeed = -0.8;
-    private double endRetractSpeed = 0.3;
+    private double beginRetractSpeed = -0.75;
+    private double endRetractSpeed = 0.35;
     private double beginExtendSpeed = 0.8;
     private double endExtendSpeed = -0.22;
      
@@ -123,10 +123,10 @@ public class Tail {
             setBaseSpeed(0);
         }
         // stinger rotation
-        if (getTheta() > voltsStingerStart 
+        if (getTheta() > voltsStingerStart     //rotate inward for pickup
                 && status != Constants.TAIL_STATUS_EJECTING) {
             setStingerSpeed(1.0);
-        } else if (getTheta() > voltsEjectStinger
+        } else if (getTheta() > voltsEjectStinger  //rotate outward to eject
                 && status == Constants.TAIL_STATUS_EJECTING) {
             setStingerSpeed(-1.0);
         } else {

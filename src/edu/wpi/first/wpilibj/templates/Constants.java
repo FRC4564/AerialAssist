@@ -52,12 +52,11 @@ public class Constants {
     public static final int JB_THROW_AUTO_DIST = 2;       //Throw based on sonar
     public static final int JB_THROW_TRUSS_TOSS = 3;      //Throw a truss toss
     public static final int JB_THROW_ROBOT_PASS = 4;      //Lob to another robot
-    public static final int JB_THROW_MANUAL = 5           //Throw static params, no sonar
-    public static final int JB_THROW_ANALOG = 7           //Throw using analog inputs
+    public static final int JB_THROW_MANUAL = 5;           //Throw static params, no sonar
+    public static final int JB_THROW_ANALOG = 7;           //Throw using analog inputs
     // leftstick
-    public static final int JB_TAIL_EXTEND = 1;           //Extend tail-eject ball
+    public static final int JB_TAIL_EJECT = 1;           //Extend tail-eject ball
     public static final int JB_TAIL_RETRACT = 2;          //Retract tail-pickup ball
-    //public static final int JB_TAIL_EJECT = 1;
  
     
     // Miscellaneous

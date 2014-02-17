@@ -46,6 +46,8 @@ public class Natasha2014 extends SimpleRobot {
      * This function is called once, when Autonomous mode is enabled.
      */
     public void autonomous() {
+        dt.setSafetyEnabled(false);
+        auto.status = Constants.AUTO_STATUS_INIT;
         while (auto.status != Constants.AUTO_STATUS_DONE) {
             auto.updateAuto();
             Timer.delay(Constants.TELEOP_LOOP_DELAY_SECS);
@@ -62,11 +64,15 @@ public class Natasha2014 extends SimpleRobot {
         while(isOperatorControl() && isEnabled()){
             
             // DRIVETRAIN
+            if (Math.abs(leftstick.getX()) < .1 &&
+                Math.abs(leftstick.getY()) < .1) {
+            dt.arcadeDrive(rightstick.getY() * 1, rightstick.getX() * .7);
+            } else {
             dt.arcadeDrive(leftstick.getY() * -1, leftstick.getX() * .7);
+            }
             
             // THROWER
-            //thrower.setThrowSpeed(ds.getAnalogIn(1)/5);
-            //thrower.setThrowArc((int)(ds.getAnalogIn(2)/5 * 160));
+            // Set thrower range based on current sonar reading
             thrower.setTargetDistance(sonar.getDistance());
             // A throw tail be home and Throw Safety button be pressed.
             if (tail.getStatus() == Constants.TAIL_STATUS_RETRACTED &&
@@ -76,22 +82,16 @@ public class Natasha2014 extends SimpleRobot {
                     thrower.startThrow();
                 // Truss toss
                 } else if (rightstick.getRawButton(Constants.JB_THROW_TRUSS_TOSS) ){
-                    thrower.setThrowSpeed(1);
-                    thrower.setThrowArc(90);
+                    thrower.setThrowSpeed(1.0);
+                    thrower.setThrowArc(110);
                     thrower.startThrow();
                 // Robot pass
-                } else if (rightstick.getRawButton(Constants.JB_THROW_ROBOT_PASS) || 
-                           rightstick.getRawButton(Constants.JB_THROW_ROBOT_PASS_ALT) ) {
+                } else if (rightstick.getRawButton(Constants.JB_THROW_ROBOT_PASS) ) {
                     thrower.setThrowSpeed(0.6);
                     thrower.setThrowArc(90);
                     thrower.startThrow();
                 // Manual throw - no sonar
-                } else if (rightstick.getRawButton(Constants.JB_THROW_TRUSS_TOSS) ){
-                    thrower.setThrowSpeed(0.6);
-                    thrower.setThrowArc(90);
-                    thrower.startThrow();
-                // Manual throw - no sonar
-                } else if (rightstick.getRawButton(Constants.JB_THROW_TRUSS_TOSS) ){
+                } else if (rightstick.getRawButton(Constants.JB_THROW_MANUAL) ){
                     thrower.setThrowSpeed(1.0);
                     thrower.setThrowArc(125);
                     thrower.startThrow();
@@ -106,7 +106,7 @@ public class Natasha2014 extends SimpleRobot {
                       
             // SCORPION TAIL
             if (thrower.getStatus() == Constants.THROWER_STATUS_HOME) {  
-                if (leftstick.getRawButton(Constants.JB_TAIL_EXTEND) ) {
+                if (leftstick.getRawButton(Constants.JB_TAIL_EJECT) ) {
                     tail.startEject();
                 }
                 if (leftstick.getRawButton(Constants.JB_TAIL_RETRACT) ) {
@@ -143,9 +143,13 @@ public class Natasha2014 extends SimpleRobot {
             SmartDashboard.putNumber("Left dist",sonar.getLeftDistance());
             SmartDashboard.putNumber("Right dist",sonar.getRightDistance());
             SmartDashboard.putNumber("Thrower Status",thrower.getStatus());
+            SmartDashboard.putNumber("Encoder",thrower.position() );
+            SmartDashboard.putNumber("Tail Status (2=retracted 4=extended)", tail.getStatus());
+            SmartDashboard.putNumber("Tail Position", tail.getTheta());            
             SmartDashboard.putNumber("Target Arc", thrower.getThrowArc());
+            SmartDashboard.putBoolean("In Range",thrower.inRange());
             
-            System.out.println(" pos:" + thrower.position() );
+            SmartDashboard.putNumber("Encoder",thrower.position() );
             //System.out.println(", arc: " + thrower.getThrowArc() );
             /*System.out.print(" sonar: " + sonar.getDistance() );
             //System.out.println(" status: " + thrower.getStatus() );
