@@ -26,9 +26,11 @@ public class Throweraterenator {
     private double motorsSpeed = 0; // Current thrower motors speed
     private double throwSpeed = 0;
     private double stowSpeed = 0;
+    private double brakeSpeed = -0.2;
     private int status = 0;
     private int arc = 0;
-    private double brakeTime = 0;
+    //private double brakeTime = 0;
+    private boolean brake = false;  //when brake is on, stowing is held off
     private boolean inRange = false; //True if target distance is in shooting range
     
     // Initialization variables
@@ -46,13 +48,9 @@ public class Throweraterenator {
     class stopThrowerTask extends java.util.TimerTask {
         public void run() {
             if (status == Constants.THROWER_STATUS_THROW && encoder.get() >= arc) {
-                setMotors(stowSpeed);
+                setMotors(brakeSpeed);
                 status = Constants.THROWER_STATUS_BRAKE;
-                System.out.println("Thrower task stopped throw");
             }
-            if (trace.count() > 1) {
-                //trace.add(position(), getThrowArc(), getStatus());
-            } 
         }
     }
     
@@ -115,6 +113,13 @@ public class Throweraterenator {
         return arc;
     }
     
+    public void setBrake() {
+        brake = true;
+    }
+    
+    public void releaseBrake() {
+        brake = false;
+    }
     
     public int getStatus() {
         return status;
@@ -167,11 +172,6 @@ public class Throweraterenator {
      *  Call this routine on a regular basis to service the thrower.
      */
     public void update() {
-        // Capture trace
-        //if (trace.count() > 50) {
-        //    trace.print();
-        //}
-        // Process Thrower status
         if (status == Constants.THROWER_STATUS_INIT) {
             updateInit();
         } else if (status == Constants.THROWER_STATUS_THROW) {
@@ -219,16 +219,14 @@ public class Throweraterenator {
     }
     
     /**
-    * Stops the thrower at its peak for the value of THROWER_brake_TIME
+    * If brake enabled, stops the thrower at its peak.  Once brake is released
+    * arm will stow.
     */
     public void updatebrake() {
-        if (brakeTime == 0) {
-            brakeTime = Timer.getFPGATimestamp();
-        } else if (Timer.getFPGATimestamp() - brakeTime <= Constants.THROWER_BRAKE_TIME) {
-            setMotors(-0.1);
-        } else { 
+        if (brake) {
+            setMotors(brakeSpeed);
+        } else {
             status = Constants.THROWER_STATUS_STOW;
-            brakeTime = 0;
         }
     }
     
@@ -251,13 +249,13 @@ public class Throweraterenator {
      * Return thrower to home position.  
      */ 
     private void updateStow() {
-        if (position() > 50) {
+        if (position() > 50) {          //Stow at full speed
             setMotors(stowSpeed);
-        } else if (position() > 1) {
+        } else if (position() > 1) {    //Slow down as we approach stops
             setMotors(-0.15);
-        } else if (position() < -1) {
-            setMotors(-stowSpeed / 2);
-        } else {
+        } else if (position() < -1) {   //If we go too far come back out
+            setMotors(0.15);
+        } else {                        //Stop at home
             setMotors(0);
             status = Constants.THROWER_STATUS_HOME;
         }
@@ -280,7 +278,7 @@ public class Throweraterenator {
         double distMax = 8.0;
         double distInterpolate = 4.0;  // distances below this are interpolated
         int arcMin = 86;
-        int arcMax = 125;
+        int arcMax = Constants.THROWER_NOMINAL_ARC;
         int arcCalc = 0;
         
         if (distance >=distMin && distance <= distMax) {  //Valid throwing range

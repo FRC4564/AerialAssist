@@ -13,7 +13,16 @@ import java.lang.*;
  * @author Oisin
  */
 public class Vision {
+    public void init() {
+        System.out.println("Vision Initialized");
+    }
+    
     public boolean hot(){
         return true;
     }
+    
+    public void close() {
+        System.out.println("Vision Closed");
+    }
+    
 }

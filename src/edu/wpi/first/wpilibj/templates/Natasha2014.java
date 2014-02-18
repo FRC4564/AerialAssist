@@ -26,9 +26,10 @@ public class Natasha2014 extends SimpleRobot {
     SinisterSonar sonar = new SinisterSonar();
     DriverStation ds;
     SmartDashboard DashData = new SmartDashboard();
-    Auto auto = new Auto(thrower, dt, ds);
     Solenoid leftLight = new Solenoid(1);
     Solenoid rightLight = new Solenoid(2);
+    Solenoid centerLight = new Solenoid(3);
+    Auto auto = new Auto(thrower, dt, ds, centerLight);
 
     /** 
      * Robot Initialization upon boot

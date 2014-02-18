@@ -20,10 +20,16 @@ public class Tail {
     private double stingerSpeed;
     private double baseSpeed;
     // potentiometer values
-    private double voltsExtended = 3.43;       // fully extended
-    private double voltsRetracted = 1.96;      // fully retracted
-    private double voltsEjectStinger = voltsRetracted * 1.10;   // stinger eject start 
-    private double voltsStingerStart = voltsRetracted * 1.50;    // stinger pickup start
+    private double voltsMin = 1.94;             // Minimum pot reading
+    private double voltsMax = 3.45;             // Maximum pot reading
+    private double voltsExtended = voltsMax - 0.02;  // safe extend
+    private double voltsRetracted = voltsMin + 0.02; // safe retract
+    // stinger motor rotation varies by mode and tail position
+    //private double voltsEjectStinger = voltsRetracted * 1.10; // stinger eject start 
+    //private double voltsStingerStart = voltsRetracted * 1.40; // stinger pickup start
+    private double extendBeginEject = voltsRetracted + 0.15;    
+    private double extendBeginPickup = voltsRetracted + 0.56;    
+    private double retractBeginPickup = voltsRetracted + 0.56;   
     // tail base motor speeds at end points and direction
     private double beginRetractSpeed = -0.75;
     private double endRetractSpeed = 0.35;
@@ -114,15 +120,36 @@ public class Tail {
                 || status == Constants.TAIL_STATUS_EJECTING) {
             updateExtend();
         } else if (status == Constants.TAIL_STATUS_INIT) {
-            if (getTheta() <= voltsRetracted) {
+            if (theta <= voltsRetracted) {
                 status = Constants.TAIL_STATUS_RETRACTED;
-            } else if (getTheta() >= voltsExtended) {
+                setBaseSpeed(0);
+            } else if (theta >= voltsExtended) {
                 status = Constants.TAIL_STATUS_EXTENDED;
+                setBaseSpeed(0);
             }
         } else {
             setBaseSpeed(0);
         }
-        // stinger rotation
+        // stinger rotation when extending
+        if (status == Constants.TAIL_STATUS_EXTENDING || 
+            status == Constants.TAIL_STATUS_EXTENDING ) {
+            if (theta > extendBeginPickup) {
+                setStingerSpeed(1.0);
+            } else if (theta > extendBeginEject) {
+                setStingerSpeed(-1.0);
+            } else {
+                setStingerSpeed(0.0);
+            }
+        // stinger rotation when retracting
+        } else if (status == Constants.TAIL_STATUS_RETRACTING ||
+                   status == Constants.TAIL_STATUS_RETRACTED ) {
+            if (theta > retractBeginPickup) {
+                setStingerSpeed(1.0);
+            } else {
+                setStingerSpeed(0.0);
+            }
+        }
+        /*
         if (getTheta() > voltsStingerStart     //rotate inward for pickup
                 && status != Constants.TAIL_STATUS_EJECTING) {
             setStingerSpeed(1.0);
@@ -132,12 +159,13 @@ public class Tail {
         } else {
                 setStingerSpeed(0.0);
         }
+        */
     }
     
     private void updateRetract() {
         double m = (endRetractSpeed - beginRetractSpeed) / (voltsRetracted - voltsExtended);
-        setBaseSpeed(m * (getTheta() - voltsRetracted) + endRetractSpeed);
-        if (getTheta() <= voltsRetracted) {
+        setBaseSpeed(m * (theta - voltsRetracted) + endRetractSpeed);
+        if (theta <= voltsRetracted) {
             setBaseSpeed(0);
             status = Constants.TAIL_STATUS_RETRACTED;
         }
@@ -145,8 +173,8 @@ public class Tail {
     
     private void updateExtend() {
         double m = (endExtendSpeed - beginExtendSpeed) / (voltsExtended - voltsRetracted);
-        setBaseSpeed(m * (getTheta() - voltsExtended) + endExtendSpeed);
-        if (getTheta() >= voltsExtended) {
+        setBaseSpeed(m * (theta - voltsExtended) + endExtendSpeed);
+        if (theta >= voltsExtended) {
             setBaseSpeed(0);
             status = Constants.TAIL_STATUS_EXTENDED;
         }

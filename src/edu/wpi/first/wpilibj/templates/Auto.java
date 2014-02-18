@@ -7,6 +7,7 @@
 package edu.wpi.first.wpilibj.templates;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
 
 /**
@@ -14,19 +15,24 @@ import edu.wpi.first.wpilibj.Timer;
  * @author TheGreenBox
  */
 public class Auto {
+    //objects used by autonomous
     Throweraterenator thrower;
     DriveTrain dt;
     DriverStation ds;
-    double startTime;
+    Solenoid light;
+    
     Vision vision = new Vision();
     private int hotCounter = 0;
+    double startTime;
     int status = Constants.AUTO_STATUS_INIT;
     double driveSpeed = 0;
     
-    public Auto(Throweraterenator thrower, DriveTrain dt, DriverStation ds) {
+    public Auto(Throweraterenator thrower, DriveTrain dt, DriverStation ds,
+                Solenoid light) {
         this.thrower = thrower;
         this.dt = dt;
         this.ds = ds;
+        this.light = light;
     }
         
     public void updateAuto() {
@@ -36,7 +42,8 @@ public class Auto {
             startTime = Timer.getFPGATimestamp();
             thrower.initThrower();
             thrower.setThrowSpeed(1.0);
-            thrower.setThrowArc(125);
+            thrower.setThrowArc(Constants.THROWER_NOMINAL_ARC);
+            vision.init();
             status = Constants.AUTO_STATUS_MOVING;
         // Moving
         } else if (status == Constants.AUTO_STATUS_MOVING) {
@@ -50,6 +57,7 @@ public class Auto {
         // Looking for Hot or Cold
         } else if (status == Constants.AUTO_STATUS_LOOKING) {
             System.out.println("Looking");
+            light.set(true);
             if (Timer.getFPGATimestamp() < startTime + 4) {
                 if (vision.hot()) {
                     hotCounter ++;
@@ -57,6 +65,8 @@ public class Auto {
                     hotCounter --;
                 }
             } else {
+                light.set(false);
+                vision.close();
                 status = Constants.AUTO_STATUS_THROWCHECK;
             }
         // Test to see if it is time to throw or wait
