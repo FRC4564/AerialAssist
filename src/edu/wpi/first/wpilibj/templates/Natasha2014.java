@@ -105,8 +105,8 @@ public class Natasha2014 extends SimpleRobot {
             }
                 // Catch ball by braking at 90 arc while button is held
             if (leftstick.getRawButton(Constants.JB_THROW_CATCH)) {
-                thrower.setThrowSpeed(0.5);
-                thrower.setThrowArc(90);
+                thrower.setThrowSpeed(0.3);
+                thrower.setThrowArc(110);
                 thrower.setBrake();
                 thrower.startThrow();
             } else {
