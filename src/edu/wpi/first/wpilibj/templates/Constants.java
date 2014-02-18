@@ -55,7 +55,7 @@ public class Constants {
     public static final int JB_THROW_MANUAL = 5;           //Throw static params, no sonar
     public static final int JB_THROW_ANALOG = 7;           //Throw using analog inputs
     // leftstick
-    public static final int JB_TAIL_EJECT = 1;           //Extend tail-eject ball
+    public static final int JB_TAIL_EXTEND = 1;           //Extend tail-eject ball
     public static final int JB_TAIL_RETRACT = 2;          //Retract tail-pickup ball
  
     
@@ -72,7 +72,6 @@ public class Constants {
     public static final int THROWER_STATUS_STOW = 2;
     public static final int THROWER_STATUS_INIT = 3;
     public static final int THROWER_STATUS_BRAKE = 4;
-    public static final double THROWER_BRAKE_TIME = 5.0;
     //Standard arc used for normal throw and autonomous (roughly 4' to 7')
     public static final int THROWER_NOMINAL_ARC = 125;
 
@@ -88,7 +87,6 @@ public class Constants {
     public static final int TAIL_STATUS_RETRACTED = 2;
     public static final int TAIL_STATUS_EXTENDING = 3;
     public static final int TAIL_STATUS_RETRACTING = 4;
-    public static final int TAIL_STATUS_EJECTING = 5;
     
     //Autonomous
     public static final int AUTO_STATUS_INIT = 0;

@@ -20,15 +20,16 @@ public class Tail {
     private double stingerSpeed;
     private double baseSpeed;
     // potentiometer values
+    private double volts = 0;
     private double voltsMin = 1.94;             // Minimum pot reading
-    private double voltsMax = 3.45;             // Maximum pot reading
-    private double voltsExtended = voltsMax - 0.02;  // safe extend
+    private double voltsMax = 3.47;             // Maximum pot reading
+    private double voltsExtended = voltsMax - 0.03;  // safe extend
     private double voltsRetracted = voltsMin + 0.02; // safe retract
     // stinger motor rotation varies by mode and tail position
     //private double voltsEjectStinger = voltsRetracted * 1.10; // stinger eject start 
     //private double voltsStingerStart = voltsRetracted * 1.40; // stinger pickup start
-    private double extendBeginEject = voltsRetracted + 0.15;    
-    private double extendBeginPickup = voltsRetracted + 0.56;    
+    private double extendBeginEject = voltsRetracted + 0.1;    
+    private double extendBeginPickup = voltsRetracted + 0.9;    
     private double retractBeginPickup = voltsRetracted + 0.56;   
     // tail base motor speeds at end points and direction
     private double beginRetractSpeed = -0.75;
@@ -101,29 +102,23 @@ public class Tail {
         status = Constants.TAIL_STATUS_RETRACTING;
     }
     
-    /**
-     *     Initiate ball ejection
-     */
-    public void startEject() {
-        status = Constants.TAIL_STATUS_EJECTING;
-    }
-    
+   
     /**
      *   Update tail and stinger movement
      *   Call every robot loop cycle.
      */
     public void update() {
+        volts = getTheta();
         // tail movement
         if (status == Constants.TAIL_STATUS_RETRACTING) {
             updateRetract();
-        } else if (status == Constants.TAIL_STATUS_EXTENDING
-                || status == Constants.TAIL_STATUS_EJECTING) {
+        } else if (status == Constants.TAIL_STATUS_EXTENDING) {
             updateExtend();
         } else if (status == Constants.TAIL_STATUS_INIT) {
-            if (theta <= voltsRetracted) {
+            if (volts <= voltsRetracted) {
                 status = Constants.TAIL_STATUS_RETRACTED;
                 setBaseSpeed(0);
-            } else if (theta >= voltsExtended) {
+            } else if (volts >= voltsExtended) {
                 status = Constants.TAIL_STATUS_EXTENDED;
                 setBaseSpeed(0);
             }
@@ -132,10 +127,10 @@ public class Tail {
         }
         // stinger rotation when extending
         if (status == Constants.TAIL_STATUS_EXTENDING || 
-            status == Constants.TAIL_STATUS_EXTENDING ) {
-            if (theta > extendBeginPickup) {
+            status == Constants.TAIL_STATUS_EXTENDED ) {
+            if (volts > extendBeginPickup) {
                 setStingerSpeed(1.0);
-            } else if (theta > extendBeginEject) {
+            } else if (volts > extendBeginEject) {
                 setStingerSpeed(-1.0);
             } else {
                 setStingerSpeed(0.0);
@@ -143,7 +138,7 @@ public class Tail {
         // stinger rotation when retracting
         } else if (status == Constants.TAIL_STATUS_RETRACTING ||
                    status == Constants.TAIL_STATUS_RETRACTED ) {
-            if (theta > retractBeginPickup) {
+            if (volts > retractBeginPickup) {
                 setStingerSpeed(1.0);
             } else {
                 setStingerSpeed(0.0);
@@ -164,8 +159,8 @@ public class Tail {
     
     private void updateRetract() {
         double m = (endRetractSpeed - beginRetractSpeed) / (voltsRetracted - voltsExtended);
-        setBaseSpeed(m * (theta - voltsRetracted) + endRetractSpeed);
-        if (theta <= voltsRetracted) {
+        setBaseSpeed(m * (getTheta() - voltsRetracted) + endRetractSpeed);
+        if (getTheta() <= voltsRetracted) {
             setBaseSpeed(0);
             status = Constants.TAIL_STATUS_RETRACTED;
         }
@@ -173,8 +168,8 @@ public class Tail {
     
     private void updateExtend() {
         double m = (endExtendSpeed - beginExtendSpeed) / (voltsExtended - voltsRetracted);
-        setBaseSpeed(m * (theta - voltsExtended) + endExtendSpeed);
-        if (theta >= voltsExtended) {
+        setBaseSpeed(m * (getTheta() - voltsExtended) + endExtendSpeed);
+        if (getTheta() >= voltsExtended) {
             setBaseSpeed(0);
             status = Constants.TAIL_STATUS_EXTENDED;
         }

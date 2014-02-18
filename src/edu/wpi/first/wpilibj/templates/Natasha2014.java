@@ -107,8 +107,8 @@ public class Natasha2014 extends SimpleRobot {
                       
             // SCORPION TAIL
             if (thrower.getStatus() == Constants.THROWER_STATUS_HOME) {  
-                if (leftstick.getRawButton(Constants.JB_TAIL_EJECT) ) {
-                    tail.startEject();
+                if (leftstick.getRawButton(Constants.JB_TAIL_EXTEND) ) {
+                    tail.startExtend();
                 }
                 if (leftstick.getRawButton(Constants.JB_TAIL_RETRACT) ) {
                     tail.startRetract();
@@ -143,9 +143,9 @@ public class Natasha2014 extends SimpleRobot {
             //System.out.print(Timer.getFPGATimestamp() );
             SmartDashboard.putNumber("Left dist",sonar.getLeftDistance());
             SmartDashboard.putNumber("Right dist",sonar.getRightDistance());
-            SmartDashboard.putNumber("Thrower Status",thrower.getStatus());
+            SmartDashboard.putNumber("Thrower Status (0=home 1=throw 2=stow 3=init 4=brake)",thrower.getStatus());
             SmartDashboard.putNumber("Encoder",thrower.position() );
-            SmartDashboard.putNumber("Tail Status (2=retracted 4=extended)", tail.getStatus());
+            SmartDashboard.putNumber("Tail Status (1=extened 2=retracted)", tail.getStatus());
             SmartDashboard.putNumber("Tail Position", tail.getTheta());            
             SmartDashboard.putNumber("Target Arc", thrower.getThrowArc());
             SmartDashboard.putBoolean("In Range",thrower.inRange());
