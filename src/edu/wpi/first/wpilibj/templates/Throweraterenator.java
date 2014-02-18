@@ -240,7 +240,11 @@ public class Throweraterenator {
             setMotors(throwSpeed);
         } else {
             setMotors(0);
-            status = Constants.THROWER_STATUS_BRAKE;
+            if (brake) {
+                status = Constants.THROWER_STATUS_BRAKE;
+            } else {
+                status = Constants.THROWER_STATUS_STOW;
+            }
         }
     }
     

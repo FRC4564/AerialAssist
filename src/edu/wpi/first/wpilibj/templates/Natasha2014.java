@@ -101,8 +101,18 @@ public class Natasha2014 extends SimpleRobot {
                    thrower.setThrowSpeed(ds.getAnalogIn(1)/5);
                    thrower.setThrowArc((int)(ds.getAnalogIn(2)/5 * 160));
                    thrower.startThrow();
-                }    
+                }
             }
+                // Catch ball by braking at 90 arc while button is held
+            if (leftstick.getRawButton(Constants.JB_THROW_CATCH)) {
+                thrower.setThrowSpeed(0.5);
+                thrower.setThrowArc(90);
+                thrower.setBrake();
+                thrower.startThrow();
+            } else {
+                thrower.releaseBrake();
+            }
+        
             thrower.update();
                       
             // SCORPION TAIL
@@ -137,6 +147,14 @@ public class Natasha2014 extends SimpleRobot {
                 rightLight.set(false);
                 leftLight.set(false);
             }
+            if (rightstick.getRawButton(Constants.JB_LIGHT_CENTER_1)
+                || rightstick.getRawButton(Constants.JB_LIGHT_CENTER_2)
+                || leftstick.getRawButton(Constants.JB_LIGHT_CENTER_1)
+                || leftstick.getRawButton(Constants.JB_LIGHT_CENTER_2)) {
+                centerLight.set(true);
+            } else {
+                centerLight.set(false);
+            }
                 
             // DEBUG
             //System.out.print("pot: " + tail.getTheta());
@@ -162,7 +180,6 @@ public class Natasha2014 extends SimpleRobot {
  
             Timer.delay(Constants.TELEOP_LOOP_DELAY_SECS);
         }        
-
     }
     
     /**
