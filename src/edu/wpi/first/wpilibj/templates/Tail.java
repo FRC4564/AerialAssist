@@ -33,7 +33,7 @@ public class Tail {
     private double retractBeginPickup = voltsRetracted + 0.56;   
     // tail base motor speeds at end points and direction
     private double beginRetractSpeed = -0.75;
-    private double endRetractSpeed = 0.35;
+    private double endRetractSpeed = 0.15;
     private double beginExtendSpeed = 0.8;
     private double endExtendSpeed = -0.22;
      

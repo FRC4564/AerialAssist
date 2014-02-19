@@ -235,7 +235,7 @@ public class Throweraterenator {
      * The timerTask is also watching for target arc, and stopping throw.
      */
     private void updateThrow() {
-        System.out.println("Throwing: " + position());
+        //System.out.println("Throwing: " + position());
         if (position() < arc) {
             setMotors(throwSpeed);
         } else {
@@ -279,7 +279,7 @@ public class Throweraterenator {
      */
     public void setTargetDistance(double distance) {
         double distMin = 1.5;
-        double distMax = 8.0;
+        double distMax = 7.0;
         double distInterpolate = 4.0;  // distances below this are interpolated
         int arcMin = 86;
         int arcMax = Constants.THROWER_NOMINAL_ARC;
